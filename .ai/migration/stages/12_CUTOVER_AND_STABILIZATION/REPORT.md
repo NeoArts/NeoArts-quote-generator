@@ -1,28 +1,29 @@
 # Stage report: 12_CUTOVER_AND_STABILIZATION Cut over and stabilize
 
 ## Scope and applicability
-Production deployment of dist/.
+Production deployment of the cloud build to GitHub Pages with the hosted Supabase backend.
 
 ## Inputs and entry checks
-Stage 11 passed. No deployment authorization, repository/remote, or hosting origin was given.
+Stage 11 passed; user authorization AUTH-003.
 
 ## Work performed
-None executed. Proposal: publish dist/ to GitHub Pages under https://neoarts.github.io/<repo>/ (same origin as legacy, so existing quotes and providers appear automatically). Once a repo exists: `npm run build && npx gh-pages -d dist`. Rollback: keep legacy live; revert the Pages branch.
+User created the public repository and enabled Pages with prepared commands; first run failed (CI type-check reached a legacy-dependent test), fixed and verified in a clean CI simulation; second run succeeded. Live smoke test passed. See evidence/deployment-record.md.
 
 ## Outputs and evidence
-AUTHORITY.json pending_requests[0].
+evidence/deployment-record.md, evidence/cloud/live-login.png, evidence/cloud/cloud-results.json, evidence/cloud/rls-check.txt.
 
 ## Exit checks
 | Check | PASS / FAIL / BLOCKED / N/A | Evidence | Limitation or reason |
 |---|---|---|---|
-| Authorized deployment evidenced | BLOCKED | AUTHORITY.json | needs explicit authorization and target repo/origin |
-| Stabilization window | BLOCKED | AUTHORITY.json | follows deployment |
+| Authorized deployment evidenced | PASS | evidence/deployment-record.md | |
+| Live smoke test | PASS | evidence/deployment-record.md | signed-in flows not run live (email confirmation) |
+| Stabilization window / user acceptance | BLOCKED | evidence/deployment-record.md | waiting for the user's first real use |
 
 ## Deviations and decisions
-—
+DECISION-017 (cloud), DECISION-016 (redesign).
 
 ## Recovery and next action
-Resume condition: user authorizes deployment and names the repository/origin. Then deploy, run e2e/run.mjs against the live URL (E2E_BASE), record evidence/deployment-record.md.
+Resume condition: user confirms real use on the live site (account, upload of browser data, quotes, PDF) or reports issues.
 
 ## Verdict
-BLOCKED
+RUNNING

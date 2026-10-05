@@ -6,3 +6,4 @@ supabase/.branches
 dist-local
 # Generated test PDFs (large; kept locally as evidence)
 .ai/migration/evidence/**/*.pdf
+dist-browser

@@ -14,8 +14,19 @@ const MAX_UPLOAD = 1.5 * 1024 * 1024;
 type QuoteRow = { id: string; number: string; client: string; date: string; data: Partial<Quote> | null };
 
 // Session caches: avoid re-uploading the same pasted image and re-downloading the same file.
-const uploadedByDataUrl = new Map<string, string>();
-const dataUrlByPath = new Map<string, string>();
+// Bounded (most recent entries), because images are large strings: an unbounded cache crashed the tab
+// when uploading a browser with hundreds of MB of legacy images.
+class RecentMap<V> extends Map<string, V> {
+    constructor(private readonly limit: number) { super(); }
+    override set(key: string, value: V): this {
+        this.delete(key);
+        super.set(key, value);
+        while (this.size > this.limit) this.delete(this.keys().next().value as string);
+        return this;
+    }
+}
+const uploadedByDataUrl = new RecentMap<string>(40);
+const dataUrlByPath = new RecentMap<string>(80);
 
 export function clearCloudCaches(): void {
     uploadedByDataUrl.clear();

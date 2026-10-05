@@ -7,10 +7,34 @@ const [url, key] = process.argv.slice(2);
 const run = Date.now().toString(36);
 const client = () => createClient(url, key, { auth: { persistSession: false } });
 
+const MAIL = process.env.MAILPIT ?? 'http://127.0.0.1:54324';
+async function confirm(email) {
+    for (let i = 0; i < 30; i++) {
+        const list = await (await fetch(`${MAIL}/api/v1/search?query=${encodeURIComponent('to:' + email)}`)).json();
+        const id = list.messages?.[0]?.ID;
+        if (id) {
+            const msg = await (await fetch(`${MAIL}/api/v1/message/${id}`)).json();
+            const link = (msg.HTML || msg.Text).match(/href="([^"]+)"/)?.[1]?.replace(/&amp;/g, '&');
+            if (link) { await fetch(link, { redirect: 'manual' }); return; }
+        }
+        await new Promise(r => setTimeout(r, 500));
+    }
+    throw new Error('confirmation email not received');
+}
+
+// Works with email confirmation on: confirms through the local test mailbox, then signs in.
 async function user(name) {
     const c = client();
-    const { data, error } = await c.auth.signUp({ email: `${name}.${run}@example.com`, password: 'clave-segura-rls' });
-    if (error || !data.session) throw new Error(`signup ${name}: ${error?.message ?? 'no session (email confirmation on?)'}`);
+    const email = `${name}.${run}@example.com`;
+    const password = 'clave-segura-rls';
+    const { data, error } = await c.auth.signUp({ email, password });
+    if (error) throw new Error(`signup ${name}: ${error.message}`);
+    if (!data.session) {
+        await confirm(email);
+        const signIn = await c.auth.signInWithPassword({ email, password });
+        if (signIn.error) throw new Error(`signin ${name}: ${signIn.error.message}`);
+        return { c, id: signIn.data.user.id };
+    }
     return { c, id: data.user.id };
 }
 

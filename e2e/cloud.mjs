@@ -1,13 +1,13 @@
 // Cloud-mode workflows against a Supabase backend (default: the local Docker stack).
-// Usage: npm run build:local-db && npx vite preview --port 4323 ; node e2e/cloud.mjs <outDir>
-// Requires email confirmation to be off (true for the local stack; see supabase/config.toml).
+// Usage: npm run build:local-db && npx vite preview --port 4322 --outDir dist-local ; node e2e/cloud.mjs <outDir>
+// Email confirmation on or off: confirmation links are read from the local test mailbox (Mailpit).
 import { chromium } from 'playwright-core';
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import * as fx from './fixture.mjs';
 
-const BASE = process.env.E2E_BASE ?? 'http://127.0.0.1:4323/';
+const BASE = process.env.E2E_BASE ?? 'http://127.0.0.1:4322/';
 const OUT = process.argv[2] ?? 'e2e-cloud-output';
 const CHROME = process.env.CHROME_PATH ?? 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 fs.mkdirSync(path.join(OUT, 'downloads'), { recursive: true });
@@ -37,12 +37,33 @@ const download = async (trigger) => {
     await dl.saveAs(file);
     return { name: dl.suggestedFilename(), file };
 };
+const MAIL = process.env.MAILPIT ?? 'http://127.0.0.1:54324';
+async function confirmationLink(email) {
+    for (let i = 0; i < 30; i++) {
+        const list = await (await fetch(`${MAIL}/api/v1/search?query=${encodeURIComponent('to:' + email)}`)).json();
+        const id = list.messages?.[0]?.ID;
+        if (id) {
+            const msg = await (await fetch(`${MAIL}/api/v1/message/${id}`)).json();
+            const link = (msg.HTML || msg.Text).match(/href="([^"]+)"/)?.[1]?.replace(/&amp;/g, '&');
+            if (link) return link;
+        }
+        await new Promise(r => setTimeout(r, 500));
+    }
+    throw new Error('confirmation email not received');
+}
+// Works with email confirmation on (production setting): opens the link from the local test mailbox.
 const signUp = async (u) => {
     await page.getByRole('tab', { name: 'Crear cuenta' }).click();
     await page.fill('#auth-email', u.email);
     await page.fill('#auth-password', u.password);
     await page.getByRole('button', { name: 'Crear cuenta', exact: true }).last().click();
-    await page.getByRole('button', { name: 'Cerrar sesión' }).waitFor({ timeout: 15000 });
+    const signedIn = page.getByRole('button', { name: 'Cerrar sesión' });
+    const emailSent = page.getByText(/Te enviamos un correo/);
+    await Promise.race([signedIn.waitFor({ timeout: 15000 }), emailSent.waitFor({ timeout: 15000 })]);
+    if (await emailSent.count()) {
+        await page.goto(await confirmationLink(u.email));
+        await signedIn.waitFor({ timeout: 15000 });
+    }
 };
 const signIn = async (u) => {
     await page.fill('#auth-email', u.email);

@@ -1,22 +1,14 @@
 {
   "schema_version": 1,
   "framework_version": "1.0.0",
-  "status": "HUMAN_REQUIRED",
-  "milestone": "READY_FOR_RELEASE",
+  "status": "RUNNING",
+  "milestone": "DEPLOYED",
   "active_stage": "12",
   "active_work_package": null,
   "revision": "src-sha256:391046bf93f0fa5f",
-  "updated_at": "2026-10-05T18:24:14.934711+00:00",
-  "next_action": "Waiting for the hosted Supabase publishable key: create .env.cloud, run the hardening SQL on the hosted project, verify against hosted (manual sign-up, confirmations on), then publish. Repository upload is blocked by a session hook: the user uploads it or allows it.",
-  "blockers": [
-    {
-      "id": "BLK-001",
-      "scope": "stage 12",
-      "evidence": "AUTHORITY.json",
-      "owner": "user",
-      "resume_condition": "explicit deployment authorization + repository/origin"
-    }
-  ],
+  "updated_at": "2026-10-05T18:45:28.082963+00:00",
+  "next_action": "Stabilization: user creates an account on the live site, confirms the email, uploads browser data via the banner, and reports issues. Then close stage 12 and mark MIGRATION_COMPLETE.",
+  "blockers": [],
   "budget_usage": {
     "work_packages_this_session": 6,
     "wall_minutes_this_session": 85,
@@ -148,12 +140,12 @@
     {
       "id": "12",
       "name": "Cut over and stabilize",
-      "status": "BLOCKED",
+      "status": "RUNNING",
       "report": "stages/12_CUTOVER_AND_STABILIZATION/REPORT.md",
       "evidence": [
-        "AUTHORITY.json"
+        "evidence/deployment-record.md"
       ],
-      "reason": "Awaiting deployment authorization and target origin"
+      "reason": null
     },
     {
       "id": "13",
@@ -165,5 +157,8 @@
       ],
       "reason": null
     }
+  ],
+  "deployment_evidence": [
+    "evidence/deployment-record.md"
   ]
 }

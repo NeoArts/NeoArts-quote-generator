@@ -41,17 +41,21 @@
       "source_of_user_authorization": "user message 2026-10-05",
       "recorded_at": "2026-10-05",
       "expires_or_invalidated_by": null
-    }
-  ],
-  "pending_requests": [
+    },
     {
-      "action": "production_deployment",
-      "environment": "GitHub Pages (suggested: same origin neoarts.github.io for data continuity)",
-      "scope": "publish dist/ of NeoArts-quote-generator",
-      "evidence_package": "stages/11_RELEASE_REHEARSAL/REPORT.md",
-      "decision_needed": "whether/where to deploy; repository/remote to use"
+      "id": "AUTH-003",
+      "action": "production deployment to GitHub Pages (public repo NeoArts/NeoArts-quote-generator) with hosted Supabase backend",
+      "environment": "production",
+      "scope": "https://neoarts.github.io/NeoArts-quote-generator/",
+      "conditions": [
+        "user performs repository writes (session hook)"
+      ],
+      "source_of_user_authorization": "user messages 2026-10-05 (\"Ok good\", \"Give me the commands\", \"Done\")",
+      "recorded_at": "2026-10-05",
+      "expires_or_invalidated_by": "user revocation"
     }
   ],
+  "pending_requests": [],
   "grant_format": {
     "id": "AUTH-001",
     "action": null,

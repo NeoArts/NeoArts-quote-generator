@@ -70,3 +70,7 @@ export async function suggestNextNumber(): Promise<string> {
     const numbers = (await getQuotes()).map(q => Number(q.number)).filter(n => Number.isInteger(n) && n >= 0);
     return numbers.length ? String(Math.max(...numbers) + 1) : '';
 }
+
+/** Number of quotes without loading them (legacy data can hold hundreds of MB of images). */
+export const countQuotes = () => run<number>('readonly', s => s.count());
+export const getQuoteIds = () => run<IDBValidKey[]>('readonly', s => s.getAllKeys()).then(keys => keys.map(String));
