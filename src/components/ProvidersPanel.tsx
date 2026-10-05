@@ -4,7 +4,8 @@ import { Button, CloseButton, Icon, formatMoney, useEscapeToClose } from './ui';
 import ProviderModal from './ProviderModal';
 import { useProviders } from './useProviders';
 import { downloadProviders, parseImportFile } from '../lib/backup';
-import { importProviders } from '../lib/providers';
+import { importProviders, legacyProvidersPreview } from '../lib/providers';
+import { cloudEnabled } from '../lib/supabase';
 import { notify } from '../lib/notify';
 
 /** IMPROVEMENT-001: accepts a providers file or a full backup; upserts by name. */
@@ -18,6 +19,38 @@ async function importFile(file: File | undefined) {
     } catch {
         notify.error('No se pudo leer el archivo de proveedores');
     }
+}
+
+/** Cloud mode, at the bottom of the panel: the legacy app's providers saved in this browser, on request. */
+function LegacyImport() {
+    const [preview, setPreview] = React.useState<ReturnType<typeof legacyProvidersPreview> | null>(null);
+    const find = () => {
+        const p = legacyProvidersPreview();
+        if (!p.providers.length) { notify.error('Este navegador no tiene proveedores de la app anterior. Ábrelo en el navegador donde la usabas.'); return; }
+        setPreview(p);
+    };
+    const run = () => {
+        if (!preview) return;
+        const { added, updated } = importProviders(preview.providers);
+        notify.success(`Proveedores de la app anterior: ${added} nuevos, ${updated} actualizados`);
+        setPreview(null);
+    };
+    if (!preview) {
+        return <button type="button" onClick={find} className="text-xs text-graphite underline-offset-2 hover:underline hover:text-ink">Traer proveedores de la app anterior</button>;
+    }
+    return (
+        <div className="text-sm space-y-2">
+            <p>
+                {preview.providers.length} proveedores en la app anterior: {preview.added} nuevos
+                {preview.updated > 0 && <>, {preview.updated} ya existen y <strong>se reemplazarán</strong> con los descuentos de la app anterior</>}.
+                Las cotizaciones ya hechas no cambian.
+            </p>
+            <div className="flex gap-2">
+                <Button text="Importar" size="sm" onClick={run} />
+                <Button text="Cancelar" size="sm" variant="ghost" onClick={() => setPreview(null)} />
+            </div>
+        </div>
+    );
 }
 
 const pct = (n: number) => `${(Number(n) * 100).toLocaleString('es-CO', { maximumFractionDigits: 1 })}%`;
@@ -82,6 +115,7 @@ export default function ProvidersPanel({ open, onClose }: { open: boolean; onClo
                             </div>
                         )}
                     </div>
+                    {cloudEnabled && <div className="border-t border-rule-soft px-5 py-3"><LegacyImport /></div>}
                 </div>
             </div>
             <ProviderModal provider={editing} onClose={() => setEditing(null)} />

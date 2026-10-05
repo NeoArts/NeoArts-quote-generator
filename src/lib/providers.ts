@@ -58,6 +58,14 @@ export function deleteProvider(name: string): void {
     writeProviders(getProviders().filter(p => p.name !== name), () => removeProvider(name));
 }
 
+/** The legacy app's providers in this browser (same origin and key), split into new and existing by name. */
+export function legacyProvidersPreview(): { providers: Provider[]; added: number; updated: number } {
+    const providers = readLocalProviders().filter(p => p && typeof p.name === 'string' && p.name.trim() !== '');
+    const names = new Set(getProviders().map(p => p.name));
+    const updated = providers.filter(p => names.has(p.name)).length;
+    return { providers, added: providers.length - updated, updated };
+}
+
 /** Upserts by name (IMPROVEMENT-001). Existing quotes keep their frozen terms. */
 export function importProviders(incoming: Provider[]): { added: number; updated: number } {
     const providers = getProviders();

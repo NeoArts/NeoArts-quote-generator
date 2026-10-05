@@ -13,6 +13,17 @@ import { suggestNextNumber } from '../src/lib/db';
 import { moveItem, recalcGroupOf } from '../src/lib/calc';
 import { letterDate } from '../src/pdf/generateQuote';
 import { quoteTotals } from '../src/components/QuoteExtras';
+import { legacyProvidersPreview } from '../src/lib/providers';
+
+describe('legacy providers import (same browser)', () => {
+    it('reads the legacy key and splits new from existing by name', () => {
+        localStorage.setItem('providers', JSON.stringify([{ id: 1, name: 'A', discount: '0.1', wholesaleDiscount: [] }, { id: 2, name: '', discount: 0 }]));
+        expect(legacyProvidersPreview()).toMatchObject({ added: 0, updated: 1 }); // (unnamed dropped; browser mode reads the same store, so A exists)
+        localStorage.setItem('providers', '{broken');
+        expect(legacyProvidersPreview().providers).toEqual([]);
+        localStorage.removeItem('providers');
+    });
+});
 
 const q = (id: string, date = '2025-01-01', number = '1'): Quote => ({ id, client: `C ${id}`, number, date, products: [{ ...emptyProduct }] });
 
