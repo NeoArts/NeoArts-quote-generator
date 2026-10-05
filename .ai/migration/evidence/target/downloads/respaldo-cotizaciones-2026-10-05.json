@@ -1,0 +1,255 @@
+{
+  "type": "neoarts-backup",
+  "version": 1,
+  "exportedAt": "2026-10-05T18:22:21.522Z",
+  "quotes": [
+    {
+      "id": "fixq01",
+      "client": "Cliente Demo SAS",
+      "number": "120",
+      "date": "2025-09-15",
+      "products": [
+        {
+          "id": 0,
+          "name": "Mug cerámico XL",
+          "markCost": 800,
+          "markType": "1 TINTA",
+          "provider": "PROMOS",
+          "providerDiscount": 0.4,
+          "cost": 10000,
+          "quantity": 100,
+          "costOff": 4800,
+          "otherCost": 200,
+          "sellPrice": 8286,
+          "totalCost": 5800,
+          "totalValue": 828600,
+          "profit": 70,
+          "image": {
+            "base64String": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAFklEQVR4nGP8z8DAwMDAxMDAwMDAAAANHQEDasKb6QAAAABJRU5ErkJggg==",
+            "height": 117
+          },
+          "discountGroup": "A"
+        },
+        {
+          "id": 1,
+          "name": "Bolígrafo",
+          "markCost": 300,
+          "markType": "LASER",
+          "provider": "PROMOS",
+          "providerDiscount": 0.4,
+          "cost": 1500,
+          "quantity": 500,
+          "costOff": 720,
+          "otherCost": 0,
+          "sellPrice": 1569,
+          "totalCost": 1020,
+          "totalValue": 784500,
+          "profit": 65,
+          "image": {
+            "base64String": "",
+            "height": 0
+          },
+          "discountGroup": "A"
+        },
+        {
+          "id": 2,
+          "name": "Libreta",
+          "markCost": 1000,
+          "markType": "SERIGRAFIA",
+          "provider": "MPPROMO",
+          "providerDiscount": 0.3,
+          "cost": 8000,
+          "quantity": 50,
+          "costOff": 5600,
+          "otherCost": 500,
+          "sellPrice": 9467,
+          "totalCost": 7100,
+          "totalValue": 473350,
+          "profit": 75,
+          "image": {
+            "base64String": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAEUlEQVR4AWL6z8AAREwMYAAAAAD//6sQGeQAAAAGSURBVAMAFyECA+kcG6cAAAAASUVORK5CYII=",
+            "height": 117
+          }
+        },
+        {
+          "id": 3,
+          "name": "Mug cerámico XL",
+          "markCost": 800,
+          "markType": "1 TINTA",
+          "provider": "PROMOS",
+          "providerDiscount": 0.4,
+          "cost": 10000,
+          "quantity": 200,
+          "costOff": 4800,
+          "otherCost": 200,
+          "sellPrice": 8286,
+          "totalCost": 5800,
+          "totalValue": 1657200,
+          "profit": 70,
+          "image": {
+            "base64String": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAFklEQVR4nGP8z8DAwMDAxMDAwMDAAAANHQEDasKb6QAAAABJRU5ErkJggg==",
+            "height": 117
+          },
+          "discountGroup": "A"
+        },
+        {
+          "id": 4,
+          "name": "Mug cerámico XL",
+          "markCost": 800,
+          "markType": "1 TINTA",
+          "provider": "PROMOS",
+          "providerDiscount": 0.4,
+          "cost": 10000,
+          "quantity": 300,
+          "costOff": 4800,
+          "otherCost": 200,
+          "sellPrice": 8286,
+          "totalCost": 5800,
+          "totalValue": 2485800,
+          "profit": 70,
+          "image": {
+            "base64String": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAFklEQVR4nGP8z8DAwMDAxMDAwMDAAAANHQEDasKb6QAAAABJRU5ErkJggg==",
+            "height": 117
+          },
+          "discountGroup": "A"
+        },
+        {
+          "id": 5,
+          "name": "Copia",
+          "markCost": 800,
+          "markType": "1 TINTA",
+          "provider": "PROMOS",
+          "providerDiscount": 0.4,
+          "cost": 10000,
+          "quantity": 100,
+          "costOff": 4800,
+          "otherCost": 200,
+          "sellPrice": 8286,
+          "totalCost": 5800,
+          "totalValue": 828600,
+          "profit": 70,
+          "image": {
+            "base64String": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAFklEQVR4nGP8z8DAwMDAxMDAwMDAAAANHQEDasKb6QAAAABJRU5ErkJggg==",
+            "height": 117
+          },
+          "discountGroup": "A"
+        }
+      ],
+      "providerTerms": {
+        "PROMOS": {
+          "discount": 0.4,
+          "wholesaleDiscount": [
+            {
+              "id": 0,
+              "amount": 1000,
+              "discount": 0.05
+            },
+            {
+              "id": 2,
+              "amount": 20000,
+              "discount": 0.2
+            }
+          ]
+        },
+        "MPPROMO": {
+          "discount": 0.3,
+          "wholesaleDiscount": []
+        }
+      },
+      "ignoredProviderChanges": {}
+    },
+    {
+      "id": "fixq02",
+      "client": "Otra Empresa",
+      "number": "121",
+      "date": "2025-10-01",
+      "products": [
+        {
+          "id": 0,
+          "name": "Gorra",
+          "markType": "BORDADO",
+          "provider": "",
+          "providerDiscount": 0,
+          "cost": 0,
+          "quantity": 0,
+          "costOff": 0,
+          "markCost": 0,
+          "otherCost": 0,
+          "totalCost": 0,
+          "sellPrice": 0,
+          "totalValue": 0,
+          "profit": 0,
+          "image": {
+            "base64String": "",
+            "height": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "imp01",
+      "client": "Importado",
+      "number": "121",
+      "date": "2025-10-01",
+      "products": [
+        {
+          "id": 0,
+          "name": "Gorra",
+          "markType": "BORDADO",
+          "provider": "",
+          "providerDiscount": 0,
+          "cost": 0,
+          "quantity": 0,
+          "costOff": 0,
+          "markCost": 0,
+          "otherCost": 0,
+          "totalCost": 0,
+          "sellPrice": 0,
+          "totalValue": 0,
+          "profit": 0,
+          "image": {
+            "base64String": "",
+            "height": 0
+          }
+        }
+      ]
+    }
+  ],
+  "providers": [
+    {
+      "id": 1,
+      "name": "PROMOS",
+      "discount": 0.4,
+      "wholesaleDiscount": [
+        {
+          "id": 0,
+          "amount": 1000,
+          "discount": 0.05
+        },
+        {
+          "id": 2,
+          "amount": 20000,
+          "discount": 0.2
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "MPPROMO",
+      "discount": 0.3,
+      "wholesaleDiscount": []
+    },
+    {
+      "id": 1791224525296,
+      "name": "NUEVOPROV",
+      "discount": 0.25,
+      "wholesaleDiscount": [
+        {
+          "id": 0,
+          "amount": 0,
+          "discount": 0
+        }
+      ]
+    }
+  ]
+}

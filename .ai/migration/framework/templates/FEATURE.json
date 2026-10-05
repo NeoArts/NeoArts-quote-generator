@@ -1,0 +1,29 @@
+{
+  "id": "FEATURE-001",
+  "description": null,
+  "actors": [],
+  "entry_points": [],
+  "critical": false,
+  "confidence": "unknown",
+  "workflow_ids": [],
+  "rule_ids": [],
+  "preconditions": [],
+  "actions": [],
+  "expected_outcomes": [],
+  "failure_cases": [],
+  "data_effects": [],
+  "external_side_effects": [],
+  "design_references": [],
+  "disposition": "unresolved",
+  "decision_id": null,
+  "acceptance_criteria": [],
+  "test_ids": [],
+  "target_implementation": [],
+  "status": "DISCOVERED",
+  "verified_revision": null,
+  "evidence": {
+    "legacy": [],
+    "target": []
+  },
+  "limitations": []
+}

@@ -1,0 +1,14 @@
+PASS A can upload into own folder
+PASS B sees no A quotes
+PASS B sees no A providers
+PASS B cannot update or delete A quote
+PASS B cannot insert rows as A
+PASS B cannot download A image
+PASS B cannot upload into A folder
+PASS B cannot sign A image URL
+PASS anon sees no quotes
+PASS anon cannot insert quotes
+PASS anon cannot download images
+PASS A reads own quote
+PASS A downloads own image
+13/13 passed

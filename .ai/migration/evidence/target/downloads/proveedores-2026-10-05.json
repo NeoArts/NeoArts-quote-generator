@@ -1,0 +1,42 @@
+{
+  "type": "neoarts-providers",
+  "version": 1,
+  "exportedAt": "2026-10-05T18:22:21.870Z",
+  "providers": [
+    {
+      "id": 1,
+      "name": "PROMOS",
+      "discount": 0.4,
+      "wholesaleDiscount": [
+        {
+          "id": 0,
+          "amount": 1000,
+          "discount": 0.05
+        },
+        {
+          "id": 2,
+          "amount": 20000,
+          "discount": 0.2
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "MPPROMO",
+      "discount": 0.3,
+      "wholesaleDiscount": []
+    },
+    {
+      "id": 1791224525296,
+      "name": "NUEVOPROV",
+      "discount": 0.25,
+      "wholesaleDiscount": [
+        {
+          "id": 0,
+          "amount": 0,
+          "discount": 0
+        }
+      ]
+    }
+  ]
+}

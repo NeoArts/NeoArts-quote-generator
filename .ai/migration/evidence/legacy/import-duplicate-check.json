@@ -1,0 +1,1 @@
+{"toasts":["Error en la transacción de base de datos","Error en la transacción de base de datos","2 archivos cargados exitosamente"],"idsAfterImport":["fixq02"],"procedure":"seed quote fixq02; select dup.json (fixq02) + new.json (imp09); click Importar Cotizaciones","observed":"transaction aborted; imp09 NOT imported"}

@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html { -webkit-font-smoothing: antialiased; }
+    body { @apply bg-paper text-ink font-sans; font-size: 15px; line-height: 1.5; }
+    /* Tabular figures everywhere numbers line up (tables, totals, references). */
+    .num { font-variant-numeric: tabular-nums; }
+    :focus-visible { outline: 2px solid theme('colors.magenta.DEFAULT'); outline-offset: 2px; }
+    ::selection { background: theme('colors.magenta.soft'); }
+}
+
+@layer components {
+    /* Expanded Archivo: the typographic signature for quote references and page titles. */
+    .wide { font-stretch: 125%; letter-spacing: -0.01em; }
+    .semiwide { font-stretch: 112%; }
+
+    /* Process-color (C/M/Y) strip under the header — the only decorative element. */
+    .cmyk-strip { background: linear-gradient(90deg, #0A84B5 0 33.33%, #C8186E 33.33% 66.66%, #F4C430 66.66% 100%); height: 3px; }
+
+    .field {
+        @apply w-full rounded-md border border-rule bg-sheet px-3 py-2 text-sm text-ink placeholder:text-mist
+               hover:border-mist focus:border-magenta focus:ring-2 focus:ring-magenta/20 focus:outline-none transition-colors;
+    }
+    .label { @apply text-sm font-medium text-graphite; }
+
+    /* Spreadsheet cells */
+    .cell { @apply h-10 w-full bg-transparent border-0 px-2.5 text-sm text-ink placeholder:text-mist/70 focus:ring-2 focus:ring-inset focus:ring-magenta focus:bg-sheet rounded-none; }
+    .cell-calc { @apply h-10 w-full bg-transparent border-0 px-2.5 text-sm text-graphite text-right num cursor-default focus:ring-0; }
+
+    .scroll-thin::-webkit-scrollbar { width: 10px; height: 10px; }
+    .scroll-thin::-webkit-scrollbar-thumb { background: #C9CED8; border-radius: 10px; border: 3px solid transparent; background-clip: content-box; }
+    .scroll-thin::-webkit-scrollbar-track { background: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+@keyframes sheet-in { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes pop-in { from { transform: translateY(6px) scale(0.985); opacity: 0; } to { transform: none; opacity: 1; } }
+.anim-sheet { animation: sheet-in 180ms ease-out; }
+.anim-pop { animation: pop-in 160ms ease-out; }

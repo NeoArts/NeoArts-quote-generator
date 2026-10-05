@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "framework_version": "1.0.0",
+  "status": "NOT_STARTED",
+  "milestone": "NONE",
+  "active_stage": "00",
+  "active_work_package": null,
+  "revision": null,
+  "updated_at": null,
+  "next_action": "Read MASTER.md and reconcile existing artifacts.",
+  "blockers": [],
+  "budget_usage": {
+    "work_packages_this_session": 0,
+    "wall_minutes_this_session": 0,
+    "total_cost": null
+  },
+  "stages": [
+    {
+      "id": "00",
+      "name": "Initialize and recover context",
+      "status": "NOT_STARTED",
+      "report": null,
+      "evidence": [],
+      "reason": null
+    },
+    {
+      "id": "01",
+      "name": "Preserve and measure baseline",
+      "status": "NOT_STARTED",
+      "report": null,
+      "evidence": [],
+      "reason": null
+    },
+    {
+      "id": "02",
+      "name": "Discover the whole system",
+      "status": "NOT_STARTED",
+      "report": null,
+      "evidence": [],
+      "reason": null
+    },
+    {
+      "id": "03",
+      "name": "Discover capabilities and workflows",
+      "status": "NOT_STARTED",
+      "report": null,
+      "evidence": [],
+      "reason": null
+    },
+    {
+      "id": "04",
+      "name": "Discover design and interactions",
+      "status": "NOT_STARTED",
+      "report": null,
+      "evidence": [],
+      "reason": null
+    },
+    {
+      "id": "05",
+      "name": "Establish the migration contract",
+      "status": "NOT_STARTED",
+      "report": null,
+      "evidence": [],
+      "reason": null
+    },
+    {
+      "id": "06",
+      "name": "Characterize and verify legacy",
+      "status": "NOT_STARTED",
+      "report": null,
+      "evidence": [],
+      "reason": null
+    },
+    {
+      "id": "07",
+      "name": "Design target and transition",
+      "status": "NOT_STARTED",
+      "report": null,
+      "evidence": [],
+      "reason": null
+    },
+    {
+      "id": "08",
+      "name": "Build foundation and recreate UI",
+      "status": "NOT_STARTED",
+      "report": null,
+      "evidence": [],
+      "reason": null
+    },
+    {
+      "id": "09",
+      "name": "Migrate complete workflow slices",
+      "status": "NOT_STARTED",
+      "report": null,
+      "evidence": [],
+      "reason": null
+    },
+    {
+      "id": "10",
+      "name": "Audit completeness independently",
+      "status": "NOT_STARTED",
+      "report": null,
+      "evidence": [],
+      "reason": null
+    },
+    {
+      "id": "11",
+      "name": "Rehearse release and data migration",
+      "status": "NOT_STARTED",
+      "report": null,
+      "evidence": [],
+      "reason": null
+    },
+    {
+      "id": "12",
+      "name": "Cut over and stabilize",
+      "status": "NOT_STARTED",
+      "report": null,
+      "evidence": [],
+      "reason": null
+    },
+    {
+      "id": "13",
+      "name": "Propose improvements and hand over",
+      "status": "NOT_STARTED",
+      "report": null,
+      "evidence": [],
+      "reason": null
+    }
+  ]
+}

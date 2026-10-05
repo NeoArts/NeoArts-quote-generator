@@ -1,0 +1,165 @@
+[
+  {
+    "k": "newQuoteDefaults",
+    "v": {
+      "date": "2026-10-05",
+      "number": ""
+    }
+  },
+  {
+    "k": "listOrder",
+    "v": [
+      "Otra Empresa",
+      "Cliente Demo SAS"
+    ]
+  },
+  {
+    "k": "download-excel",
+    "v": "Otra Empresa-2025-10-01.xlsx"
+  },
+  {
+    "k": "download-json",
+    "v": "quote-121-Otra-Empresa.json"
+  },
+  {
+    "k": "rowsAfterEditQty0",
+    "v": [
+      {
+        "id": 0,
+        "quantity": "100",
+        "providerDiscount": 0.4,
+        "costOff": 5400,
+        "totalCost": 6400,
+        "sellPrice": 9143,
+        "totalValue": 914300
+      },
+      {
+        "id": 1,
+        "quantity": 500,
+        "providerDiscount": 0.4,
+        "costOff": 810,
+        "totalCost": 1110,
+        "sellPrice": 1708,
+        "totalValue": 854000
+      },
+      {
+        "id": 2,
+        "quantity": 50,
+        "providerDiscount": 0.3,
+        "costOff": 0,
+        "totalCost": 0,
+        "sellPrice": 0,
+        "totalValue": 0
+      }
+    ]
+  },
+  {
+    "k": "rowsAfterEditQty2",
+    "v": [
+      {
+        "id": 0,
+        "quantity": "100",
+        "providerDiscount": 0.4,
+        "costOff": 5400,
+        "totalCost": 6400,
+        "sellPrice": 9143,
+        "totalValue": 914300
+      },
+      {
+        "id": 1,
+        "quantity": 500,
+        "providerDiscount": 0.4,
+        "costOff": 810,
+        "totalCost": 1110,
+        "sellPrice": 1708,
+        "totalValue": 854000
+      },
+      {
+        "id": 2,
+        "quantity": 50,
+        "providerDiscount": 0.3,
+        "costOff": 0,
+        "totalCost": 0,
+        "sellPrice": 0,
+        "totalValue": 0
+      }
+    ]
+  },
+  {
+    "k": "afterScales",
+    "v": [
+      {
+        "id": 0,
+        "quantity": "100",
+        "providerDiscount": 0.4,
+        "costOff": 5400,
+        "totalCost": 6400,
+        "sellPrice": 9143,
+        "totalValue": 914300
+      },
+      {
+        "id": 1,
+        "quantity": 500,
+        "providerDiscount": 0.4,
+        "costOff": 810,
+        "totalCost": 1110,
+        "sellPrice": 1708,
+        "totalValue": 854000
+      },
+      {
+        "id": 2,
+        "quantity": 50,
+        "providerDiscount": 0.3,
+        "costOff": 0,
+        "totalCost": 0,
+        "sellPrice": 0,
+        "totalValue": 0
+      },
+      {
+        "id": 1,
+        "quantity": 200,
+        "providerDiscount": 0.4,
+        "costOff": 5400,
+        "totalCost": 6400,
+        "sellPrice": 9143,
+        "totalValue": 1828600
+      },
+      {
+        "id": 2,
+        "quantity": 300,
+        "providerDiscount": 0.4,
+        "costOff": 5400,
+        "totalCost": 6400,
+        "sellPrice": 9143,
+        "totalValue": 2742900
+      }
+    ]
+  },
+  {
+    "k": "afterDuplicateIds",
+    "v": [
+      0,
+      1,
+      2,
+      1,
+      2,
+      1
+    ]
+  },
+  {
+    "k": "afterAddIds",
+    "v": [
+      0,
+      1,
+      2,
+      1,
+      2,
+      1,
+      2
+    ]
+  },
+  {
+    "k": "download-pdf",
+    "v": "Cotización Cliente Demo SAS REF_ VPM-120.pdf"
+  }
+]

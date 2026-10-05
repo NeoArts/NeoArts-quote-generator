@@ -1,0 +1,109 @@
+{
+  "base": "http://127.0.0.1:4322/",
+  "at": "2026-10-05T18:22:27.233Z",
+  "results": [
+    {
+      "name": "W1 empty list and new quote creation",
+      "status": "PASS"
+    },
+    {
+      "name": "W2 seeded list ordering, select all, bulk and single delete",
+      "status": "PASS"
+    },
+    {
+      "name": "W3 Excel and JSON export",
+      "status": "PASS"
+    },
+    {
+      "name": "W4 JSON import: file picker, validation, preview, duplicates, drag and drop",
+      "status": "PASS"
+    },
+    {
+      "name": "W2b single quote delete with confirm",
+      "status": "PASS"
+    },
+    {
+      "name": "W5 editor: open, calculation parity with legacy, autosave, deep link, back",
+      "status": "PASS"
+    },
+    {
+      "name": "W6 provider select: search, select (recalculates), inline create",
+      "status": "PASS"
+    },
+    {
+      "name": "W7 details dialog edit and scales (unique ids, legacy values)",
+      "status": "PASS"
+    },
+    {
+      "name": "W8 duplicate, add, delete rows (unique ids, last row reset)",
+      "status": "PASS"
+    },
+    {
+      "name": "W9 images: thumbnail popup, paste, clipboard button, clear",
+      "status": "PASS"
+    },
+    {
+      "name": "W11 PDF generation",
+      "status": "PASS"
+    },
+    {
+      "name": "W12 providers dialog: list, edit tiers by row, create, delete",
+      "status": "PASS"
+    },
+    {
+      "name": "W13 phone-width layout has no page-level horizontal scroll",
+      "status": "PASS"
+    },
+    {
+      "name": "W14 unknown quote deep link",
+      "status": "PASS"
+    },
+    {
+      "name": "W16 Escape closes only the topmost dialog; new-quote draft survives close",
+      "status": "PASS"
+    },
+    {
+      "name": "W17 unreadable JSON files show the legacy error",
+      "status": "PASS"
+    },
+    {
+      "name": "W18 provider discount change: notice, ignore, apply (quotes never change silently)",
+      "status": "PASS"
+    },
+    {
+      "name": "W19 totals, numbers stored as numbers",
+      "status": "PASS"
+    },
+    {
+      "name": "W20 reorder rows: drag and drop, Alt+Arrow",
+      "status": "PASS"
+    },
+    {
+      "name": "W21 undo row delete and quote delete",
+      "status": "PASS"
+    },
+    {
+      "name": "W22 next quote number suggestion",
+      "status": "PASS"
+    },
+    {
+      "name": "W23 backup download, providers export/import",
+      "status": "PASS"
+    },
+    {
+      "name": "W24 PDF options and live preview",
+      "status": "PASS"
+    },
+    {
+      "name": "W15 no console or page errors",
+      "status": "PASS"
+    }
+  ],
+  "dialogs": [
+    "¿Estás segur@ de eliminar 1 cotización?",
+    "¿Estás segur@ de borrar esta cotización?",
+    "¿Estás seguro de eliminar este proveedor?",
+    "¿Estás segur@ de borrar esta cotización?"
+  ],
+  "errors": []
+}

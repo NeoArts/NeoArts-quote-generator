@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "framework_version": "1.0.0",
+  "project_name": null,
+  "objective": null,
+  "legacy_root": null,
+  "target_root": null,
+  "profiles": [
+    "generic"
+  ],
+  "target_stack": null,
+  "target_architecture": null,
+  "deployment_target": null,
+  "migration_strategy": "to_be_determined",
+  "fidelity": {
+    "behavior": "preserve_required",
+    "interface": "preserve_familiarity",
+    "approved_deviations": []
+  },
+  "constraints": [],
+  "existing_artifacts": [],
+  "commands": {
+    "build": null,
+    "start_legacy": null,
+    "start_target": null,
+    "test": null,
+    "release_checks": []
+  },
+  "environments": {
+    "discovery": "local_or_sanitized_nonproduction",
+    "staging": null,
+    "production": null
+  },
+  "acceptance": {
+    "critical_feature_ids": [],
+    "performance_thresholds": null,
+    "visual_tolerances": null,
+    "operational_observation_window": null,
+    "rollback_triggers": []
+  },
+  "budgets": {
+    "max_repair_attempts_per_package": 3,
+    "max_work_packages_per_session": 10,
+    "max_wall_minutes_per_session": 120,
+    "max_total_cost": null,
+    "currency": null
+  },
+  "notes": [
+    "Null means unknown, not approval or zero. Discover facts; request consequential missing decisions. Cost is not authorized by a null budget. Session limits are configurable conservative defaults."
+  ]
+}

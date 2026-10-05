@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "default_policy": "local_reversible_work_only",
+  "allowed_actions": [
+    "read_project_sources",
+    "write_migration_records",
+    "edit_target_locally_within_scope",
+    "run_isolated_local_tests"
+  ],
+  "conditional_actions": [
+    "staging_deployment",
+    "paid_resources",
+    "external_side_effects",
+    "production_deployment",
+    "production_data_mutation",
+    "legacy_retirement",
+    "destructive_operations",
+    "feature_removal",
+    "material_product_changes"
+  ],
+  "grants": [],
+  "pending_requests": [],
+  "grant_format": {
+    "id": "AUTH-001",
+    "action": null,
+    "environment": null,
+    "scope": null,
+    "conditions": [],
+    "source_of_user_authorization": null,
+    "recorded_at": null,
+    "expires_or_invalidated_by": null
+  },
+  "notes": [
+    "Record real user authorization; do not manufacture grants. Existing direct authorization remains valid within its scope. Never store secret values. Legacy source modification is not covered by target-local permission when roots differ."
+  ]
+}

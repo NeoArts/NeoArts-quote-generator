@@ -1,0 +1,11 @@
+
+ RUN  v2.1.9 C:/Users/tparr/Documents/TOMAS/PERSONAL/generador-cotizaciones/NeoArts-quote-generator
+
+ ✓ tests/calc.test.ts (44 tests) 28ms
+ ✓ tests/misc.test.ts (19 tests) 13ms
+
+ Test Files  2 passed (2)
+      Tests  63 passed (63)
+   Start at  13:23:32
+   Duration  1.52s (transform 258ms, setup 22ms, collect 666ms, tests 41ms, environment 973ms, prepare 240ms)
+

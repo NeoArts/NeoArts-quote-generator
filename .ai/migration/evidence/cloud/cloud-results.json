@@ -1,0 +1,39 @@
+{
+  "base": "http://127.0.0.1:4323/",
+  "at": "2026-10-05T18:21:52.867Z",
+  "results": [
+    {
+      "name": "C1 login screen, wrong password message",
+      "status": "PASS"
+    },
+    {
+      "name": "C2 sign up user A, create provider and quote, edit, image, autosave to the cloud",
+      "status": "PASS"
+    },
+    {
+      "name": "C3 PDF and JSON export include the cloud image",
+      "status": "PASS"
+    },
+    {
+      "name": "C4 user B cannot see user A data",
+      "status": "PASS"
+    },
+    {
+      "name": "C5 user A sees their data again after signing back in",
+      "status": "PASS"
+    },
+    {
+      "name": "C6 upload this browser's legacy data to a new account",
+      "status": "PASS"
+    },
+    {
+      "name": "C7 delete with undo restores the cloud quote",
+      "status": "PASS"
+    },
+    {
+      "name": "C8 no page errors",
+      "status": "PASS"
+    }
+  ],
+  "errors": []
+}

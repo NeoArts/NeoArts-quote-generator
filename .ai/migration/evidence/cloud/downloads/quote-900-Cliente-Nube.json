@@ -1,0 +1,41 @@
+{
+  "products": [
+    {
+      "id": 0,
+      "cost": 10000,
+      "name": "Termo",
+      "image": {
+        "path": "71b3adff-e845-4042-8cae-34fedcb5ae73/85f71b7a-2faa-433d-a6a0-02282ef2fd61.png",
+        "height": 117,
+        "base64String": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAEUlEQVR4AWL6z8AAREwMYAAAAAD//6sQGeQAAAAGSURBVAMAFyECA+kcG6cAAAAASUVORK5CYII="
+      },
+      "profit": 50,
+      "costOff": 6000,
+      "markCost": 0,
+      "markType": "",
+      "provider": "PROMOS",
+      "quantity": 10,
+      "otherCost": 0,
+      "sellPrice": 12000,
+      "totalCost": 6000,
+      "totalValue": 120000,
+      "providerDiscount": 0.4
+    }
+  ],
+  "providerTerms": {
+    "PROMOS": {
+      "discount": 0.4,
+      "wholesaleDiscount": [
+        {
+          "id": 0,
+          "amount": 0,
+          "discount": 0
+        }
+      ]
+    }
+  },
+  "id": "v6hsba",
+  "number": "900",
+  "client": "Cliente Nube",
+  "date": "2026-10-05"
+}

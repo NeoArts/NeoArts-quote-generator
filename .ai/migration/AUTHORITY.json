@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "default_policy": "local_reversible_work_only",
+  "allowed_actions": [
+    "read_project_sources",
+    "write_migration_records",
+    "edit_target_locally_within_scope",
+    "run_isolated_local_tests"
+  ],
+  "conditional_actions": [
+    "staging_deployment",
+    "paid_resources",
+    "external_side_effects",
+    "production_deployment",
+    "production_data_mutation",
+    "legacy_retirement",
+    "destructive_operations",
+    "feature_removal",
+    "material_product_changes"
+  ],
+  "grants": [
+    {
+      "id": "AUTH-001",
+      "action": "local migration engineering: discovery, documentation, target implementation, isolated testing, debugging, verification",
+      "environment": "local",
+      "scope": "NeoArts-quote-generator target; legacy read-only (isolated copy for runtime)",
+      "conditions": [
+        "preserve legacy baseline and unrelated changes",
+        "no production deployment, destructive data ops, paid resources, or deliberate feature removal without explicit authorization"
+      ],
+      "source_of_user_authorization": "user message 2026-10-05 (session launch prompt)",
+      "recorded_at": "2026-10-05",
+      "expires_or_invalidated_by": "user revocation"
+    },
+    {
+      "id": "AUTH-002",
+      "action": "scope reduction to quote creator + embedded providers; no sidebar",
+      "environment": "product",
+      "scope": "DECISION-001, DECISION-002",
+      "conditions": [],
+      "source_of_user_authorization": "user message 2026-10-05",
+      "recorded_at": "2026-10-05",
+      "expires_or_invalidated_by": null
+    }
+  ],
+  "pending_requests": [
+    {
+      "action": "production_deployment",
+      "environment": "GitHub Pages (suggested: same origin neoarts.github.io for data continuity)",
+      "scope": "publish dist/ of NeoArts-quote-generator",
+      "evidence_package": "stages/11_RELEASE_REHEARSAL/REPORT.md",
+      "decision_needed": "whether/where to deploy; repository/remote to use"
+    }
+  ],
+  "grant_format": {
+    "id": "AUTH-001",
+    "action": null,
+    "environment": null,
+    "scope": null,
+    "conditions": [],
+    "source_of_user_authorization": null,
+    "recorded_at": null,
+    "expires_or_invalidated_by": null
+  },
+  "notes": [
+    "Record real user authorization; do not manufacture grants. Existing direct authorization remains valid within its scope. Never store secret values. Legacy source modification is not covered by target-local permission when roots differ."
+  ]
+}

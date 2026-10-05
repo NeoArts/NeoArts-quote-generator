@@ -1,0 +1,1743 @@
+{
+  "schema_version": 1,
+  "source_revision": "src-sha256:391046bf93f0fa5f",
+  "legacy_revision": "NeoArts-WebTools@69f5c25",
+  "scope_note": "Scope per user: only \"Creador de cotizaciones\" incl. embedded Proveedores. Other legacy features excluded by user instruction (DECISION-001).",
+  "features": [
+    {
+      "id": "FEATURE-001",
+      "description": "Quote list: newest-first ordering (ISO and DD/MM/YYYY), count text, empty state",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "/ (list)"
+      ],
+      "critical": true,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Quotes sorted by date desc",
+        "Empty state text shown with no quotes",
+        "Count text \"N cotizaciones creadas\""
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/01-quote-list-empty.png",
+        "evidence/legacy/03-quote-list.png"
+      ],
+      "disposition": "preserve",
+      "decision_id": "DECISION-007",
+      "acceptance_criteria": [
+        "Quotes sorted by date desc",
+        "Empty state text shown with no quotes",
+        "Count text \"N cotizaciones creadas\""
+      ],
+      "test_ids": [
+        "E2E:W1",
+        "E2E:W2",
+        "UNIT:sortQuotes"
+      ],
+      "target_implementation": [
+        "src/components/QuoteList.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/01-quote-list-empty.png",
+          "evidence/legacy/03-quote-list.png",
+          "evidence/legacy/capture-log.json"
+        ],
+        "target": [
+          "evidence/target/01-quote-list-empty.png",
+          "evidence/target/03-quote-list.png",
+          "evidence/target/e2e-results.json",
+          "evidence/target/unit-tests.txt"
+        ]
+      },
+      "limitations": [
+        "Plural spelling corrected (DECISION-007)",
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-002",
+      "description": "Create quote dialog (Fecha default today, Cotización, Cliente; random id; legacy next-number suggestion from localStorage \"quotes\")",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "Nueva Cotización button"
+      ],
+      "critical": true,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Quote stored in IndexedDB and listed",
+        "Date defaults to today (UTC ISO like legacy)"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/02-new-quote-modal.png"
+      ],
+      "disposition": "preserve",
+      "decision_id": "DECISION-005",
+      "acceptance_criteria": [
+        "Quote stored in IndexedDB and listed",
+        "Date defaults to today (UTC ISO like legacy)"
+      ],
+      "test_ids": [
+        "E2E:W1"
+      ],
+      "target_implementation": [
+        "src/components/NewQuoteModal.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/02-new-quote-modal.png"
+        ],
+        "target": [
+          "evidence/target/02-new-quote-modal.png",
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25",
+        "Number suggestion now from IndexedDB (FEATURE-026)"
+      ]
+    },
+    {
+      "id": "FEATURE-003",
+      "description": "Open quote for editing (row click; currentQuote in localStorage; deep link, refresh, back)",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "quote row"
+      ],
+      "critical": true,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Editor opens with stored data",
+        "Refresh keeps editor",
+        "Back link returns to list"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/07-editor.png"
+      ],
+      "disposition": "preserve",
+      "decision_id": "DECISION-004",
+      "acceptance_criteria": [
+        "Editor opens with stored data",
+        "Refresh keeps editor",
+        "Back link returns to list"
+      ],
+      "test_ids": [
+        "E2E:W5",
+        "E2E:W14"
+      ],
+      "target_implementation": [
+        "src/App.tsx",
+        "src/components/QuoteEditor.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/07-editor.png"
+        ],
+        "target": [
+          "evidence/target/07-editor.png",
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-004",
+      "description": "Select one/all quotes and bulk delete with confirm + toast",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "list checkboxes"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Confirm text \"¿Estás segur@ de eliminar N ...?\"",
+        "Selected quotes removed"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/04-quote-list-all-selected.png"
+      ],
+      "disposition": "preserve",
+      "decision_id": null,
+      "acceptance_criteria": [
+        "Confirm text \"¿Estás segur@ de eliminar N ...?\"",
+        "Selected quotes removed"
+      ],
+      "test_ids": [
+        "E2E:W2"
+      ],
+      "target_implementation": [
+        "src/components/QuoteList.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/04-quote-list-all-selected.png"
+        ],
+        "target": [
+          "evidence/target/04-quote-list-all-selected.png",
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-005",
+      "description": "Delete single quote with confirm + toast",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "row trash button"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Confirm \"¿Estás segur@ de borrar esta cotización?\"",
+        "Quote removed"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/03-quote-list.png"
+      ],
+      "disposition": "preserve",
+      "decision_id": null,
+      "acceptance_criteria": [
+        "Confirm \"¿Estás segur@ de borrar esta cotización?\"",
+        "Quote removed"
+      ],
+      "test_ids": [
+        "E2E:W2b"
+      ],
+      "target_implementation": [
+        "src/components/QuoteList.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/03-quote-list.png"
+        ],
+        "target": [
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-006",
+      "description": "Export quote to Excel (filename client-date.xlsx, hidden Id column); column mapping corrected by IMPROVEMENT-003",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "row Excel button"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Correct column values, numeric cells"
+      ],
+      "failure_cases": [],
+      "data_effects": [
+        "download only"
+      ],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "change",
+      "decision_id": "DECISION-012",
+      "acceptance_criteria": [
+        "Correct column values, numeric cells"
+      ],
+      "test_ids": [
+        "E2E:W3",
+        "UNIT:excelRows"
+      ],
+      "target_implementation": [
+        "src/lib/exporters.ts"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/downloads/Otra Empresa-2025-10-01.xlsx"
+        ],
+        "target": [
+          "evidence/target/downloads/Otra Empresa-2025-10-01.xlsx",
+          "evidence/parity/excel-parity.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25",
+        "Excel parity with legacy intentionally broken by IMPROVEMENT-003 (legacy parity evidence kept)"
+      ]
+    },
+    {
+      "id": "FEATURE-007",
+      "description": "Download quote JSON (quote-<number>-<client>.json, pretty printed)",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "row JSON button"
+      ],
+      "critical": true,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "JSON identical to legacy export"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "preserve",
+      "decision_id": null,
+      "acceptance_criteria": [
+        "JSON identical to legacy export"
+      ],
+      "test_ids": [
+        "E2E:W3",
+        "UNIT:quoteJsonFileName"
+      ],
+      "target_implementation": [
+        "src/lib/exporters.ts"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/downloads/quote-121-Otra-Empresa.json"
+        ],
+        "target": [
+          "evidence/target/downloads/quote-121-Otra-Empresa.json",
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25",
+        "JSON numbers are now numeric (FEATURE-031)"
+      ]
+    },
+    {
+      "id": "FEATURE-008",
+      "description": "Import quotes from JSON files: picker + drag & drop, multi-file, validation, preview, Limpiar, duplicate detection, toasts",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "Importar Cotizaciones card"
+      ],
+      "critical": true,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Valid files previewed",
+        "Invalid/non-JSON rejected with messages",
+        "Non-duplicates imported; duplicates reported"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/06-json-import-preview.png"
+      ],
+      "disposition": "preserve",
+      "decision_id": "DECISION-008",
+      "acceptance_criteria": [
+        "Valid files previewed",
+        "Invalid/non-JSON rejected with messages",
+        "Non-duplicates imported; duplicates reported"
+      ],
+      "test_ids": [
+        "E2E:W4",
+        "UNIT:isValidQuote",
+        "UNIT:importQuotes"
+      ],
+      "target_implementation": [
+        "src/components/JsonImporter.tsx",
+        "src/lib/db.ts"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/06-json-import-preview.png",
+          "evidence/legacy/import-duplicate-check.json"
+        ],
+        "target": [
+          "evidence/target/06-json-import-preview.png",
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-009",
+      "description": "Edit quote header (Fecha, Cotización, Cliente) with autosave",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "editor header"
+      ],
+      "critical": true,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Changes persisted to IndexedDB and survive reload"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/07-editor.png"
+      ],
+      "disposition": "preserve",
+      "decision_id": null,
+      "acceptance_criteria": [
+        "Changes persisted to IndexedDB and survive reload"
+      ],
+      "test_ids": [
+        "E2E:W5"
+      ],
+      "target_implementation": [
+        "src/components/QuoteFields.tsx",
+        "src/components/QuoteEditor.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/07-editor.png"
+        ],
+        "target": [
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-010",
+      "description": "Product table: 15 columns, sticky header and sticky row actions, horizontal/vertical scroll, autosave",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "editor table"
+      ],
+      "critical": true,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Columns/headers identical to legacy",
+        "Edits persisted"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/08-editor-after-calc.png",
+        "evidence/legacy/09-editor-scrolled-right.png"
+      ],
+      "disposition": "preserve",
+      "decision_id": null,
+      "acceptance_criteria": [
+        "Columns/headers identical to legacy",
+        "Edits persisted"
+      ],
+      "test_ids": [
+        "E2E:W5"
+      ],
+      "target_implementation": [
+        "src/components/ProductFields.tsx",
+        "src/components/QuoteEditor.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/08-editor-after-calc.png",
+          "evidence/legacy/09-editor-scrolled-right.png"
+        ],
+        "target": [
+          "evidence/target/08-editor-after-calc.png",
+          "evidence/target/09-editor-scrolled-right.png"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-011",
+      "description": "Pricing calculation: provider discount, wholesale tiers, discount groups, cost/price/value fields",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "any product edit"
+      ],
+      "critical": true,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Outputs equal legacy ProductCalc for all characterization cases",
+        "Running-app values equal legacy capture"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "preserve",
+      "decision_id": null,
+      "acceptance_criteria": [
+        "Outputs equal legacy ProductCalc for all characterization cases",
+        "Running-app values equal legacy capture"
+      ],
+      "test_ids": [
+        "UNIT:calc (44 cases vs legacy module)",
+        "E2E:W5",
+        "E2E:W6",
+        "E2E:W7"
+      ],
+      "target_implementation": [
+        "src/lib/calc.ts"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/capture-log.json"
+        ],
+        "target": [
+          "evidence/target/unit-tests.txt",
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-012",
+      "description": "Add row",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "+ Agregar Fila"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Empty product appended with unique id, table scrolls to bottom"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "preserve",
+      "decision_id": "DECISION-003",
+      "acceptance_criteria": [
+        "Empty product appended with unique id, table scrolls to bottom"
+      ],
+      "test_ids": [
+        "E2E:W8"
+      ],
+      "target_implementation": [
+        "src/components/QuoteEditor.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/capture-log.json"
+        ],
+        "target": [
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-013",
+      "description": "Delete row (last row resets to one empty product)",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "row trash"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Row removed"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "preserve",
+      "decision_id": null,
+      "acceptance_criteria": [
+        "Row removed"
+      ],
+      "test_ids": [
+        "E2E:W8"
+      ],
+      "target_implementation": [
+        "src/components/QuoteEditor.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [],
+        "target": [
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-014",
+      "description": "Duplicate row",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "row duplicate button"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Copy appended with unique id; edits do not leak to original"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "preserve",
+      "decision_id": "DECISION-003",
+      "acceptance_criteria": [
+        "Copy appended with unique id; edits do not leak to original"
+      ],
+      "test_ids": [
+        "E2E:W8"
+      ],
+      "target_implementation": [
+        "src/components/QuoteEditor.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/capture-log.json"
+        ],
+        "target": [
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-015",
+      "description": "Product details dialog (vertical form, textarea name, image box)",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "row info button"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Edits apply to the row"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/13-details-modal.png"
+      ],
+      "disposition": "preserve",
+      "decision_id": null,
+      "acceptance_criteria": [
+        "Edits apply to the row"
+      ],
+      "test_ids": [
+        "E2E:W7"
+      ],
+      "target_implementation": [
+        "src/components/ProductDetailsModal.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/13-details-modal.png"
+        ],
+        "target": [
+          "evidence/target/13-details-modal.png"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-016",
+      "description": "Create scales from details dialog (comma-separated quantities)",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "Crear escalas"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "One recalculated copy per quantity, legacy values"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/14-scales-mode.png"
+      ],
+      "disposition": "preserve",
+      "decision_id": "DECISION-003",
+      "acceptance_criteria": [
+        "One recalculated copy per quantity, legacy values"
+      ],
+      "test_ids": [
+        "E2E:W7",
+        "UNIT:parseScales"
+      ],
+      "target_implementation": [
+        "src/components/ProductDetailsModal.tsx",
+        "src/components/QuoteEditor.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/14-scales-mode.png",
+          "evidence/legacy/capture-log.json"
+        ],
+        "target": [
+          "evidence/target/14-scales-mode.png",
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-017",
+      "description": "Product image: thumbnail/Ver opens image dialog; paste into box; 📋 clipboard button; trash clears; height for 117pt width",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "image cell"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Image stored as data URL with computed height"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/16-image-popup.png"
+      ],
+      "disposition": "preserve",
+      "decision_id": null,
+      "acceptance_criteria": [
+        "Image stored as data URL with computed height"
+      ],
+      "test_ids": [
+        "E2E:W9"
+      ],
+      "target_implementation": [
+        "src/components/ProductImage.tsx",
+        "src/lib/images.ts"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/16-image-popup.png"
+        ],
+        "target": [
+          "evidence/target/16-image-popup.png",
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-018",
+      "description": "Provider select: searchable list with % badge, inline \"Crear <name>\" opens provider dialog",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "Proveedor cell"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Selecting recalculates",
+        "Created provider saved and listed"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/10-provider-dropdown.png",
+        "evidence/legacy/11-provider-create-option.png",
+        "evidence/legacy/12-provider-create-modal.png"
+      ],
+      "disposition": "preserve",
+      "decision_id": null,
+      "acceptance_criteria": [
+        "Selecting recalculates",
+        "Created provider saved and listed"
+      ],
+      "test_ids": [
+        "E2E:W6"
+      ],
+      "target_implementation": [
+        "src/components/ProviderSelect.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/10-provider-dropdown.png",
+          "evidence/legacy/11-provider-create-option.png",
+          "evidence/legacy/12-provider-create-modal.png"
+        ],
+        "target": [
+          "evidence/target/10-provider-dropdown.png",
+          "evidence/target/11-provider-create-option.png",
+          "evidence/target/12-provider-create-modal.png"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-019",
+      "description": "Import product from catalogospromocionales.com URL via public CORS proxies",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "🔗 Importar desde URL"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Product appended: name, PROMOS, 1 TINTA, qty 1, image height 200"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/17-url-import-panel.png"
+      ],
+      "disposition": "retire",
+      "decision_id": "DECISION-015",
+      "acceptance_criteria": [
+        "Product appended: name, PROMOS, 1 TINTA, qty 1, image height 200"
+      ],
+      "test_ids": [],
+      "target_implementation": [],
+      "status": "RETIRED",
+      "verified_revision": null,
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/17-url-import-panel.png"
+        ],
+        "target": []
+      },
+      "limitations": [
+        "Live third-party proxies/site not exercised (mocked); external availability unverified",
+        "legacy baseline NeoArts-WebTools@69f5c25",
+        "Removed at user request (DECISION-015)"
+      ]
+    },
+    {
+      "id": "FEATURE-020",
+      "description": "Generate quote PDF (letter text, table with images, terms, signature; filename)",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "Generar cotización"
+      ],
+      "critical": true,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "PDF byte-identical to legacy for the same quote (excluding creation date/ID)"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "preserve",
+      "decision_id": null,
+      "acceptance_criteria": [
+        "PDF byte-identical to legacy for the same quote (excluding creation date/ID)"
+      ],
+      "test_ids": [
+        "E2E:W11",
+        "PARITY:pdf"
+      ],
+      "target_implementation": [
+        "src/pdf/generateQuote.ts",
+        "src/pdf/pdfUtils.ts"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/downloads/legacy-quote.pdf"
+        ],
+        "target": [
+          "evidence/parity/pdf-parity.json",
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-021",
+      "description": "Providers management embedded in quote creator (cards, create, edit, delete, wholesale tiers) — no separate page",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "Proveedores button (list)"
+      ],
+      "critical": true,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "CRUD keyed by name in localStorage \"providers\"",
+        "Tier rows add/edit/delete by position"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/18-providers-page.png",
+        "evidence/legacy/19-provider-details.png"
+      ],
+      "disposition": "change",
+      "decision_id": "DECISION-002",
+      "acceptance_criteria": [
+        "CRUD keyed by name in localStorage \"providers\"",
+        "Tier rows add/edit/delete by position"
+      ],
+      "test_ids": [
+        "E2E:W12"
+      ],
+      "target_implementation": [
+        "src/components/ProvidersPanel.tsx",
+        "src/components/ProviderModal.tsx",
+        "src/lib/providers.ts"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/18-providers-page.png",
+          "evidence/legacy/19-provider-details.png"
+        ],
+        "target": [
+          "evidence/target/18-providers-panel.png",
+          "evidence/target/19-provider-details.png",
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-022",
+      "description": "Toast notifications (texts and styles)",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "all actions"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Same messages as legacy"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [
+        "evidence/legacy/05-toasts.png"
+      ],
+      "disposition": "preserve",
+      "decision_id": "DECISION-009",
+      "acceptance_criteria": [
+        "Same messages as legacy"
+      ],
+      "test_ids": [
+        "E2E:W3",
+        "E2E:W4"
+      ],
+      "target_implementation": [
+        "src/lib/notify.ts",
+        "src/App.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/05-toasts.png"
+        ],
+        "target": [
+          "evidence/target/05-toasts.png"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-023",
+      "description": "Browser storage schema compatibility (IndexedDB QuotesDB v1/quotes keyPath id; localStorage providers, currentQuote)",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "storage"
+      ],
+      "critical": true,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Target reads/writes legacy schema unchanged"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "preserve",
+      "decision_id": null,
+      "acceptance_criteria": [
+        "Target reads/writes legacy schema unchanged"
+      ],
+      "test_ids": [
+        "UNIT:importQuotes",
+        "E2E:W2 (seeded with legacy-format data)"
+      ],
+      "target_implementation": [
+        "src/lib/db.ts",
+        "src/lib/providers.ts"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [
+          "evidence/legacy/fixture.js"
+        ],
+        "target": [
+          "evidence/target/e2e-results.json",
+          "evidence/target/unit-tests.txt"
+        ]
+      },
+      "limitations": [
+        "Data carries over automatically only when deployed on the same origin as legacy (neoarts.github.io); otherwise via JSON export/import (quotes) — providers have no export (see PROPOSALS)",
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-024",
+      "description": "Phone-width usability (no page-level horizontal scroll; table scrolls inside its container)",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "all"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "scrollWidth <= viewport"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "change",
+      "decision_id": "DECISION-004",
+      "acceptance_criteria": [
+        "scrollWidth <= viewport"
+      ],
+      "test_ids": [
+        "E2E:W13"
+      ],
+      "target_implementation": [
+        "src/App.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [],
+        "target": [
+          "evidence/target/20-mobile-list.png",
+          "evidence/target/21-mobile-editor.png"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-025",
+      "description": "Providers export/import and full backup (quotes + providers); backup/providers files accepted by the quote importer",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "Descargar respaldo (list)",
+        "Exportar/Importar proveedores (Proveedores dialog)",
+        "Importar Cotizaciones"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Backup and providers files download",
+        "Provider import upserts by name",
+        "Backup import adds quotes (duplicates skipped) and upserts providers"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "change",
+      "decision_id": "DECISION-012",
+      "acceptance_criteria": [
+        "Backup and providers files download",
+        "Provider import upserts by name",
+        "Backup import adds quotes (duplicates skipped) and upserts providers"
+      ],
+      "test_ids": [
+        "E2E:W23",
+        "UNIT:parseImportFile"
+      ],
+      "target_implementation": [
+        "src/lib/backup.ts",
+        "src/lib/providers.ts",
+        "src/components/ProvidersPanel.tsx",
+        "src/components/JsonImporter.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [],
+        "target": [
+          "evidence/target/e2e-results.json",
+          "evidence/target/unit-tests.txt"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-026",
+      "description": "Next quote number suggested from stored quotes (max numeric + 1)",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "Nueva Cotización"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Number field prefilled when empty"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "change",
+      "decision_id": "DECISION-012",
+      "acceptance_criteria": [
+        "Number field prefilled when empty"
+      ],
+      "test_ids": [
+        "E2E:W22",
+        "UNIT:suggestNextNumber"
+      ],
+      "target_implementation": [
+        "src/lib/db.ts",
+        "src/components/NewQuoteModal.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [],
+        "target": [
+          "evidence/target/e2e-results.json",
+          "evidence/target/unit-tests.txt"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-027",
+      "description": "Frozen provider terms per quote; notice to apply or ignore provider discount changes; previous-group recalculation",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "editor"
+      ],
+      "critical": true,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Existing quotes never change when a provider changes",
+        "Notice shows old vs current terms",
+        "Aplicar recalculates that provider rows; Ignorar hides until the next change"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "change",
+      "decision_id": "DECISION-013",
+      "acceptance_criteria": [
+        "Existing quotes never change when a provider changes",
+        "Notice shows old vs current terms",
+        "Aplicar recalculates that provider rows; Ignorar hides until the next change"
+      ],
+      "test_ids": [
+        "E2E:W18",
+        "UNIT:terms",
+        "UNIT:calc (expectedUpdate)"
+      ],
+      "target_implementation": [
+        "src/lib/terms.ts",
+        "src/lib/calc.ts",
+        "src/components/QuoteExtras.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [],
+        "target": [
+          "evidence/target/22-provider-change-notice.png",
+          "evidence/target/e2e-results.json",
+          "evidence/target/unit-tests.txt"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-028",
+      "description": "Quote totals (valor total, costo total, utilidad, margen)",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "editor"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Totals shown under the table"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "change",
+      "decision_id": "DECISION-012",
+      "acceptance_criteria": [
+        "Totals shown under the table"
+      ],
+      "test_ids": [
+        "E2E:W19",
+        "UNIT:quoteTotals"
+      ],
+      "target_implementation": [
+        "src/components/QuoteExtras.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [],
+        "target": [
+          "evidence/target/23-totals.png",
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-029",
+      "description": "Editable PDF letter fields per quote (cities, IVA, validity, payment, production, delivery; quote date option)",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "Datos del PDF"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Options persisted per quote; defaults reproduce the legacy PDF byte-for-byte"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "change",
+      "decision_id": "DECISION-012",
+      "acceptance_criteria": [
+        "Options persisted per quote; defaults reproduce the legacy PDF byte-for-byte"
+      ],
+      "test_ids": [
+        "E2E:W24",
+        "UNIT:letterDate",
+        "PARITY:pdf (defaults)"
+      ],
+      "target_implementation": [
+        "src/components/QuoteExtras.tsx",
+        "src/pdf/generateQuote.ts"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [],
+        "target": [
+          "evidence/target/e2e-results.json",
+          "evidence/parity/pdf-parity.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-030",
+      "description": "Undo for row deletion and quote deletion (toast \"Deshacer\")",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "row trash",
+        "quote trash",
+        "bulk delete"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Deleted row/quote restored"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "change",
+      "decision_id": "DECISION-012",
+      "acceptance_criteria": [
+        "Deleted row/quote restored"
+      ],
+      "test_ids": [
+        "E2E:W21"
+      ],
+      "target_implementation": [
+        "src/lib/notify.ts",
+        "src/components/QuoteEditor.tsx",
+        "src/components/QuoteList.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [],
+        "target": [
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-031",
+      "description": "Numbers stored as numbers (quotes, providers, exports); legacy string data still read",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "storage"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Stored numeric fields are numbers"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "change",
+      "decision_id": "DECISION-012",
+      "acceptance_criteria": [
+        "Stored numeric fields are numbers"
+      ],
+      "test_ids": [
+        "E2E:W19",
+        "UNIT:numbers"
+      ],
+      "target_implementation": [
+        "src/lib/numbers.ts",
+        "src/lib/db.ts"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [],
+        "target": [
+          "evidence/target/e2e-results.json",
+          "evidence/target/unit-tests.txt"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-032",
+      "description": "PDF engine assets as binary files loaded on demand (JS chunk 1.44 MB -> 0.41 MB), PDF unchanged",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "Generar cotización",
+        "preview"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "PDF byte-identical to legacy"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "change",
+      "decision_id": "DECISION-012",
+      "acceptance_criteria": [
+        "PDF byte-identical to legacy"
+      ],
+      "test_ids": [
+        "PARITY:pdf"
+      ],
+      "target_implementation": [
+        "src/pdf/assets.ts",
+        "src/pdf/assets/"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [],
+        "target": [
+          "evidence/parity/pdf-parity.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-033",
+      "description": "Row reordering: drag handle and Alt+Arrow keys",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "row handle"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Order changes and persists; PDF follows table order"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "change",
+      "decision_id": "DECISION-012",
+      "acceptance_criteria": [
+        "Order changes and persists; PDF follows table order"
+      ],
+      "test_ids": [
+        "E2E:W20",
+        "UNIT:moveItem"
+      ],
+      "target_implementation": [
+        "src/components/ProductTable.tsx"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [],
+        "target": [
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    },
+    {
+      "id": "FEATURE-034",
+      "description": "Collapsible live PDF preview beside the editor (real PDF, regenerated 0.7 s after edits)",
+      "actors": [
+        "quote author"
+      ],
+      "entry_points": [
+        "Vista previa del PDF"
+      ],
+      "critical": false,
+      "confidence": "high",
+      "workflow_ids": [],
+      "rule_ids": [],
+      "preconditions": [],
+      "actions": [],
+      "expected_outcomes": [
+        "Preview shows the same PDF as the download and updates after edits"
+      ],
+      "failure_cases": [],
+      "data_effects": [],
+      "external_side_effects": [],
+      "design_references": [],
+      "disposition": "change",
+      "decision_id": "DECISION-014",
+      "acceptance_criteria": [
+        "Preview shows the same PDF as the download and updates after edits"
+      ],
+      "test_ids": [
+        "E2E:W24",
+        "MANUAL:preview-headed"
+      ],
+      "target_implementation": [
+        "src/components/QuoteExtras.tsx",
+        "src/pdf/generateQuote.ts"
+      ],
+      "status": "VERIFIED",
+      "verified_revision": "src-sha256:391046bf93f0fa5f",
+      "evidence": {
+        "legacy": [],
+        "target": [
+          "evidence/target/25-pdf-preview-headed.png",
+          "evidence/target/e2e-results.json"
+        ]
+      },
+      "limitations": [
+        "Uses the browser built-in PDF viewer (iframe); headless Chrome cannot render it, verified headed",
+        "legacy baseline NeoArts-WebTools@69f5c25"
+      ]
+    }
+  ]
+}

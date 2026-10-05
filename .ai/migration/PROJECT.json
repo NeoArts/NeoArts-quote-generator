@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "framework_version": "1.0.0",
+  "project_name": "NeoArts-quote-generator",
+  "objective": "Migrate ONLY the \"Creador de cotizaciones\" feature (including its embedded Proveedores management, not as a separate section) of NeoArts-WebTools to a focused web app, preserving required behavior, data semantics, and interface familiarity. Other legacy features are out of scope. No sidebar unless needed.",
+  "legacy_root": "C:\\Users\\tparr\\Documents\\TOMAS\\PERSONAL\\generador-cotizaciones\\NeoArts-WebTools",
+  "target_root": "C:\\Users\\tparr\\Documents\\TOMAS\\PERSONAL\\generador-cotizaciones\\NeoArts-quote-generator",
+  "profiles": [
+    "web"
+  ],
+  "target_stack": "Vite 5 + React 18.3 + TypeScript 5.5 + Tailwind CSS 3.4 (@tailwindcss/forms); jsPDF 2.5.1 + jspdf-autotable 3.8.2; xlsx 0.18.5; file-saver; react-hot-toast 2.6.0. Static SPA, browser storage only.",
+  "target_architecture": "Single static page; hash routes #/ and #/cotizacion/<id>; IndexedDB QuotesDB v1 (quotes) + localStorage providers/currentQuote, schema identical to legacy; PDF engine copied from legacy and lazy-loaded.",
+  "deployment_target": null,
+  "migration_strategy": "rehearsed replacement of one feature; legacy left untouched; same-origin storage compatibility enables zero-copy data continuity",
+  "fidelity": {
+    "behavior": "preserve_required",
+    "interface": "preserve_familiarity",
+    "approved_deviations": [
+      "DECISION-002",
+      "DECISION-003",
+      "DECISION-004",
+      "DECISION-005",
+      "DECISION-007",
+      "DECISION-008",
+      "DECISION-009",
+      "DECISION-010"
+    ]
+  },
+  "constraints": [
+    "Only the quote creator + embedded providers (user)",
+    "No sidebar unless needed (user)",
+    "Legacy checkout is read-only"
+  ],
+  "existing_artifacts": [],
+  "commands": {
+    "build": "npm run build",
+    "start_legacy": "(isolated copy) npx astro build && npx astro preview --port 4321",
+    "start_target": "npm run dev  (or: npm run build && npx vite preview --port 4322)",
+    "test": "npm test",
+    "release_checks": [
+      "npm run build",
+      "npm test",
+      "node e2e/run.mjs <outDir> (needs preview on :4322 and local Chrome)",
+      "node e2e/pdf-parity.mjs <legacyBase> <targetBase> <outDir> (needs both servers)"
+    ]
+  },
+  "environments": {
+    "discovery": "local_or_sanitized_nonproduction",
+    "staging": null,
+    "production": null
+  },
+  "acceptance": {
+    "critical_feature_ids": [
+      "FEATURE-001",
+      "FEATURE-002",
+      "FEATURE-003",
+      "FEATURE-007",
+      "FEATURE-008",
+      "FEATURE-009",
+      "FEATURE-010",
+      "FEATURE-011",
+      "FEATURE-020",
+      "FEATURE-021",
+      "FEATURE-023"
+    ],
+    "performance_thresholds": null,
+    "visual_tolerances": "Familiar layout/terminology/colors; exact pixels not required (no sidebar per user).",
+    "operational_observation_window": null,
+    "rollback_triggers": []
+  },
+  "budgets": {
+    "max_repair_attempts_per_package": 3,
+    "max_work_packages_per_session": 10,
+    "max_wall_minutes_per_session": 120,
+    "max_total_cost": null,
+    "currency": null
+  },
+  "notes": [
+    "Null means unknown, not approval or zero. Discover facts; request consequential missing decisions. Cost is not authorized by a null budget. Session limits are configurable conservative defaults."
+  ]
+}

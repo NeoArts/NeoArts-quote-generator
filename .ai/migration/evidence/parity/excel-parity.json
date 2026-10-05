@@ -1,0 +1,113 @@
+{
+  "same": true,
+  "legacy": {
+    "rows": [
+      [
+        "Id",
+        "Artículo",
+        "Descuento Proveedor",
+        "Precio con descuento",
+        "Costo Total",
+        "Precio de venta",
+        "Valor total",
+        "Tipo de marca",
+        "Proveedor",
+        "Costo",
+        "Cantidad",
+        "Costo de marca",
+        "Otros costos",
+        "Rentabilidad",
+        "Imagen"
+      ],
+      [
+        0,
+        "Gorra",
+        0,
+        0,
+        0,
+        0,
+        0,
+        "BORDADO",
+        "",
+        0,
+        0,
+        "BORDADO",
+        0,
+        0
+      ]
+    ],
+    "cols": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ],
+    "ref": "A1:O2"
+  },
+  "target": {
+    "rows": [
+      [
+        "Id",
+        "Artículo",
+        "Descuento Proveedor",
+        "Precio con descuento",
+        "Costo Total",
+        "Precio de venta",
+        "Valor total",
+        "Tipo de marca",
+        "Proveedor",
+        "Costo",
+        "Cantidad",
+        "Costo de marca",
+        "Otros costos",
+        "Rentabilidad",
+        "Imagen"
+      ],
+      [
+        0,
+        "Gorra",
+        0,
+        0,
+        0,
+        0,
+        0,
+        "BORDADO",
+        "",
+        0,
+        0,
+        "BORDADO",
+        0,
+        0
+      ]
+    ],
+    "cols": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ],
+    "ref": "A1:O2"
+  }
+}
