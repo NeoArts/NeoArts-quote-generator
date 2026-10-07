@@ -5,8 +5,9 @@
       "cost": 10000,
       "name": "Termo",
       "image": {
-        "path": "1f5edebe-367b-4dd9-bca1-3e859ab403d6/6c2d5411-57ee-43e7-a3fc-f907dabd8ba9.png",
+        "path": "696cbd94-03c0-42db-987a-d7b68ea16ffc/e1aa6858-11d5-4a54-b0ea-6fc3547e5382.png",
         "height": 117,
+        "thumbPath": "696cbd94-03c0-42db-987a-d7b68ea16ffc/e1aa6858-11d5-4a54-b0ea-6fc3547e5382.thumb.jpg",
         "base64String": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAEUlEQVR4AWL6z8AAREwMYAAAAAD//6sQGeQAAAAGSURBVAMAFyECA+kcG6cAAAAASUVORK5CYII="
       },
       "profit": 50,
@@ -34,8 +35,8 @@
       ]
     }
   },
-  "id": "nylkv9",
+  "id": "pbf5vm",
   "number": "900",
   "client": "Cliente Nube",
-  "date": "2026-10-05"
+  "date": "2026-10-07"
 }

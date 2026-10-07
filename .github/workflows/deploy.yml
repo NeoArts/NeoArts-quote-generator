@@ -26,7 +26,7 @@ jobs:
           cache: npm
       - run: npm ci
       # The calculation characterization tests need the legacy checkout next to this repo; they run locally.
-      - run: npx vitest run tests/misc.test.ts
+      - run: npx vitest run tests/misc.test.ts tests/library.test.ts
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:

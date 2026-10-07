@@ -1,6 +1,6 @@
 {
   "base": "http://127.0.0.1:4322/",
-  "at": "2026-10-05T19:07:08.353Z",
+  "at": "2026-10-07T16:03:27.891Z",
   "results": [
     {
       "name": "C1 login screen, wrong password message",
@@ -12,6 +12,10 @@
     },
     {
       "name": "C3 PDF and JSON export include the cloud image",
+      "status": "PASS"
+    },
+    {
+      "name": "C3b reuse a previous product in a new quote (image comes from the cloud)",
       "status": "PASS"
     },
     {

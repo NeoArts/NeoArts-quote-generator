@@ -128,10 +128,33 @@ await step('C3 PDF and JSON export include the cloud image', async () => {
     await page.getByRole('link', { name: 'Volver a cotizaciones' }).click();
     await page.getByRole('button', { name: /Cliente Nube/ }).waitFor();
     await page.locator('li', { hasText: 'Cliente Nube' }).locator('img').first().waitFor();
+    const thumbSrc = await page.locator('li', { hasText: 'Cliente Nube' }).locator('img').first().getAttribute('src');
+    assert.ok(thumbSrc.includes('.thumb.jpg'), 'list uses the small thumbnail');
     const json = await download(() => page.locator('li', { hasText: 'Cliente Nube' }).getByRole('button', { name: 'Descargar JSON' }).click());
     const q = JSON.parse(fs.readFileSync(json.file, 'utf8'));
     assert.ok(q.products[0].image.base64String.startsWith('data:image/'));
     await shot('c03-list');
+});
+
+await step('C3b reuse a previous product in a new quote (image comes from the cloud)', async () => {
+    await page.getByRole('button', { name: 'Nueva cotización' }).first().click();
+    const dialog = page.getByRole('dialog', { name: 'Nueva cotización' });
+    await dialog.locator('#quote-client').fill('Cliente Segundo');
+    await dialog.getByRole('button', { name: 'Crear cotización' }).click();
+    await page.getByRole('button', { name: /Cliente Segundo/ }).click();
+    await page.locator('#product-name-0').waitFor();
+    await wait(1000);
+    await page.locator('#product-name-0').fill('');
+    await page.locator('#product-name-0').type('term');
+    await page.getByRole('listbox', { name: 'Productos cotizados antes' }).waitFor({ timeout: 10000 });
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await page.getByTestId('product-row-0').getByAltText('Preview').waitFor({ timeout: 10000 });
+    assert.equal(await page.inputValue('#product-cost-0'), '10000');
+    assert.equal(await page.getAttribute('#product-sellPrice-0', 'data-value'), '12000');
+    await page.getByText('Guardado', { exact: true }).waitFor({ timeout: 10000 });
+    await page.getByRole('link', { name: 'Volver a cotizaciones' }).click();
+    await page.getByRole('button', { name: /Cliente Segundo/ }).waitFor();
 });
 
 await step('C4 user B cannot see user A data', async () => {

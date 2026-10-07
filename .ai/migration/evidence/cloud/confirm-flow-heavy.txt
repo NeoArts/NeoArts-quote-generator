@@ -1,12 +1,12 @@
 signup ok, waiting for email
 confirmation link: http://127.0.0.1:54321/auth/v1/verify?token=…&type=signup&redirect_to=http://127.0.0.1:4322/
 url after: http://127.0.0.1:4322/
-upload: {"seconds":10,"peakHeapMB":40,"quotesListed":80}
-samples: [{"s":1,"requests":12,"heapMB":6},{"s":2,"requests":12,"heapMB":6},{"s":3,"requests":12,"heapMB":5},{"s":4,"requests":12,"heapMB":5},{"s":5,"requests":12,"heapMB":5},{"s":6,"requests":12,"heapMB":5},{"s":7,"requests":12,"heapMB":5},{"s":8,"requests":12,"heapMB":5},{"s":9,"requests":12,"heapMB":5},{"s":10,"requests":12,"heapMB":5}]
-top requests: [["GET http://127.0.0.1:54321/rest/v1/quotes",82],["POST http://127.0.0.1:54321/rest/v1/quotes",80],["GET http://127.0.0.1:4322/favicon.svg",2],["GET http://127.0.0.1:54321/auth/v1/verify",1],["GET http://127.0.0.1:4322/",1],["GET https://fonts.googleapis.com/css2",1],["GET http://127.0.0.1:4322/assets/index-iLhBdh4w.js",1],["GET http://127.0.0.1:4322/assets/index-CqonvXBd.css",1]]
+upload: {"seconds":12,"peakHeapMB":40,"quotesListed":80}
+samples: [{"s":1,"requests":12,"heapMB":6},{"s":2,"requests":12,"heapMB":5},{"s":3,"requests":12,"heapMB":4},{"s":4,"requests":12,"heapMB":4},{"s":5,"requests":12,"heapMB":4},{"s":6,"requests":12,"heapMB":4},{"s":7,"requests":12,"heapMB":4},{"s":8,"requests":12,"heapMB":4},{"s":9,"requests":12,"heapMB":4},{"s":10,"requests":12,"heapMB":4}]
+top requests: [["GET http://127.0.0.1:54321/rest/v1/quotes",82],["POST http://127.0.0.1:54321/rest/v1/quotes",80],["GET http://127.0.0.1:4322/favicon.svg",2],["POST http://127.0.0.1:54321/storage/v1/object/sign/product-images",2],["GET http://127.0.0.1:54321/auth/v1/verify",1],["GET http://127.0.0.1:4322/",1],["GET https://fonts.googleapis.com/css2",1],["GET http://127.0.0.1:4322/assets/index-BA29SBt6.js",1]]
 visible: Subidas 80 cotizaciones y 1 proveedores
 Cotizaciones
-confirma.muvmgjk3@example.com
+confirma.muyaroqq@example.com
 Cerrar sesión
 Cotizaciones
 

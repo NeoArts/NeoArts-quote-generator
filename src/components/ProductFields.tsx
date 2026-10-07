@@ -4,6 +4,7 @@ import { Icon, Input, TextArea } from './ui';
 import ProviderSelect from './ProviderSelect';
 import ProviderModal from './ProviderModal';
 import { ImageBox, ImageModal, readClipboardImage } from './ProductImage';
+import ProductNameInput from './ProductNameInput';
 
 type EditableField = Exclude<keyof Product, 'id' | 'image' | 'provider'>;
 export type ColumnGroup = 'Producto' | 'Costos' | 'Venta';
@@ -119,6 +120,9 @@ export default function ProductFields({ product, index, onFieldChange, onImageCh
         if (col.calc) {
             return <input id={idFor(field)} readOnly tabIndex={-1} aria-label={rowLabel(col)} data-value={value} className="cell-calc" value={formatCalc(raw)} />;
         }
+        if (field === 'name') {
+            return <ProductNameInput id={idFor(field)} row={index} value={value} ariaLabel={rowLabel(col)} placeholder={col.placeholder} onChange={v => onFieldChange('name', v)} />;
+        }
         const numeric = col.type === 'number' || field === 'providerDiscount';
         return (
             <input
@@ -126,7 +130,7 @@ export default function ProductFields({ product, index, onFieldChange, onImageCh
                 type={col.type ?? 'text'}
                 inputMode={numeric ? 'decimal' : undefined}
                 aria-label={rowLabel(col)}
-                className={`cell ${numeric ? 'text-right num' : ''} ${field === 'name' ? 'font-medium' : ''}`}
+                className={`cell ${numeric ? 'text-right num' : ''}`}
                 value={value}
                 placeholder={col.placeholder}
                 onChange={onChange}

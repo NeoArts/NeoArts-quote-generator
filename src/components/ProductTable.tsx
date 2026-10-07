@@ -30,6 +30,35 @@ export default function ProductTable({ products, onFieldChange, onImageChange, o
     const [dragOver, setDragOver] = React.useState<number | null>(null);
 
     const endDrag = () => { setDragFrom(null); setDragOver(null); };
+
+    // Spreadsheet keys: Enter/Shift+Enter move down/up, Ctrl+Enter adds a product, Ctrl+D copies the value above.
+    const focusCell = (field: string, row: number) => setTimeout(() => {
+        const el = document.getElementById(`product-${field}-${row}`) as HTMLInputElement | null;
+        el?.focus();
+        if (el && 'select' in el && el.tagName === 'INPUT' && !el.readOnly) el.select();
+    }, 0);
+    const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        const target = e.target as HTMLElement;
+        const m = /^product-(\w+)-(\d+)$/.exec(target.id);
+        if (!m) return;
+        const [, field, rowText] = m;
+        const row = Number(rowText);
+        const mod = e.ctrlKey || e.metaKey;
+        if (e.key === 'Enter' && mod) {
+            e.preventDefault();
+            onAdd();
+            focusCell('name', products.length);
+        } else if (e.key === 'Enter' && target.tagName === 'INPUT' && !e.altKey) {
+            e.preventDefault();
+            const next = e.shiftKey ? row - 1 : row + 1;
+            if (next >= 0 && next < products.length) focusCell(field, next);
+        } else if (mod && (e.key === 'd' || e.key === 'D') && row > 0) {
+            e.preventDefault();
+            const above = products[row - 1]?.[field as keyof Product];
+            const calc = (target as HTMLInputElement).readOnly;
+            if (!calc && above !== undefined && typeof above !== 'object') onFieldChange(row)(field as keyof Product, String(above));
+        }
+    };
     // Keyboard moves keep focus on the moved row's handle.
     const moveWithKeyboard = (from: number, to: number) => {
         onMove(from, to);
@@ -38,7 +67,7 @@ export default function ProductTable({ products, onFieldChange, onImageChange, o
 
     return (
         <div className="bg-sheet rounded-xl shadow-sheet overflow-hidden">
-            <div id="table-scroll" className="overflow-auto scroll-thin max-h-[calc(100vh-17rem)]">
+            <div id="table-scroll" className="overflow-auto scroll-thin max-h-[calc(100vh-17rem)]" onKeyDown={onKeyDown}>
                 <div className="w-max min-w-full">
                     <div className="sticky top-0 z-20 bg-sheet">
                         <div className="flex border-b border-rule-soft">
@@ -97,9 +126,16 @@ export default function ProductTable({ products, onFieldChange, onImageChange, o
                     ))}
                 </div>
             </div>
-            <button type="button" onClick={onAdd} className="w-full flex items-center gap-2 px-4 h-11 text-sm font-medium text-graphite hover:text-ink hover:bg-well border-t border-rule-soft">
-                <Icon name="plus" className="w-4 h-4" /> Agregar producto
-            </button>
+            <div className="flex items-center border-t border-rule-soft">
+                <button type="button" onClick={onAdd} className="flex-1 flex items-center gap-2 px-4 h-11 text-sm font-medium text-graphite hover:text-ink hover:bg-well">
+                    <Icon name="plus" className="w-4 h-4" /> Agregar producto
+                </button>
+                <p className="hidden lg:flex items-center gap-4 px-4 text-xs text-mist" aria-label="Atajos de teclado">
+                    <span><kbd className="font-sans font-semibold text-graphite">Enter</kbd> fila siguiente</span>
+                    <span><kbd className="font-sans font-semibold text-graphite">Ctrl+Enter</kbd> nuevo producto</span>
+                    <span><kbd className="font-sans font-semibold text-graphite">Ctrl+D</kbd> copiar de arriba</span>
+                </p>
+            </div>
         </div>
     );
 }

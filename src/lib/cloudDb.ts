@@ -25,7 +25,7 @@ class RecentMap<V> extends Map<string, V> {
         return this;
     }
 }
-const uploadedByDataUrl = new RecentMap<string>(40);
+const uploadedByDataUrl = new RecentMap<{ path: string; thumbPath?: string }>(40);
 const dataUrlByPath = new RecentMap<string>(80);
 
 export function clearCloudCaches(): void {
@@ -35,43 +35,57 @@ export function clearCloudCaches(): void {
 
 const MAX_SOURCE = 15 * 1024 * 1024;
 
-async function toUploadable(blob: Blob): Promise<Blob> {
-    if (blob.size > MAX_SOURCE) throw new Error('La imagen es demasiado grande (máximo 15 MB).');
-    if (ALLOWED.includes(blob.type) && blob.size <= MAX_UPLOAD) return blob;
-    // Large or unusual formats are re-encoded as JPEG (max 1600 px wide) to fit the bucket limits.
+/** Re-encodes as JPEG on white (transparent areas would turn black), at most `maxWidth` px wide. */
+async function reencode(blob: Blob, maxWidth: number, quality: number): Promise<Blob> {
     const bitmap = await createImageBitmap(blob);
-    const scale = Math.min(1, 1600 / bitmap.width);
+    const scale = Math.min(1, maxWidth / bitmap.width);
     const canvas = document.createElement('canvas');
-    canvas.width = Math.round(bitmap.width * scale);
-    canvas.height = Math.round(bitmap.height * scale);
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
     const ctx = canvas.getContext('2d')!;
     ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-    return new Promise((resolve, reject) => canvas.toBlob(b => (b ? resolve(b) : reject(new Error('No se pudo procesar la imagen'))), 'image/jpeg', 0.85));
+    return new Promise((resolve, reject) => canvas.toBlob(b => (b ? resolve(b) : reject(new Error('No se pudo procesar la imagen'))), 'image/jpeg', quality));
 }
 
-async function uploadImage(dataUrl: string, userId: string): Promise<string> {
+async function toUploadable(blob: Blob): Promise<Blob> {
+    if (blob.size > MAX_SOURCE) throw new Error('La imagen es demasiado grande (máximo 15 MB).');
+    if (ALLOWED.includes(blob.type) && blob.size <= MAX_UPLOAD) return blob;
+    // Large or unusual formats are re-encoded as JPEG (max 1600 px wide) to fit the bucket limits.
+    return reencode(blob, 1600, 0.85);
+}
+
+type Uploaded = { path: string; thumbPath?: string };
+
+async function uploadImage(dataUrl: string, userId: string): Promise<Uploaded> {
     const cached = uploadedByDataUrl.get(dataUrl);
     if (cached) return cached;
-    const blob = await toUploadable(await (await fetch(dataUrl)).blob());
+    const source = await (await fetch(dataUrl)).blob();
+    const blob = await toUploadable(source);
     const ext = blob.type === 'image/png' ? 'png' : blob.type === 'image/webp' ? 'webp' : 'jpg';
-    const path = `${userId}/${crypto.randomUUID()}.${ext}`;
-    const { error } = await requireSupabase().storage.from(BUCKET).upload(path, blob, { contentType: blob.type, upsert: false });
+    const base = `${userId}/${crypto.randomUUID()}`;
+    const storage = requireSupabase().storage.from(BUCKET);
+    const { error } = await storage.upload(`${base}.${ext}`, blob, { contentType: blob.type, upsert: false });
     if (error) throw new Error(`No se pudo subir una imagen: ${error.message}`);
-    uploadedByDataUrl.set(dataUrl, path);
-    dataUrlByPath.set(path, dataUrl);
-    return path;
+    const uploaded: Uploaded = { path: `${base}.${ext}` };
+    // Small preview for lists; a failure here only means lists fall back to the full image.
+    try {
+        const thumb = await reencode(source, 160, 0.8);
+        if (!(await storage.upload(`${base}.thumb.jpg`, thumb, { contentType: 'image/jpeg', upsert: false })).error) uploaded.thumbPath = `${base}.thumb.jpg`;
+    } catch { /* keep the full image only */ }
+    uploadedByDataUrl.set(dataUrl, uploaded);
+    dataUrlByPath.set(uploaded.path, dataUrl);
+    return uploaded;
 }
 
-async function downloadImage(path: string): Promise<string> {
+export async function downloadImage(path: string): Promise<string> {
     const cached = dataUrlByPath.get(path);
     if (cached) return cached;
     const { data, error } = await requireSupabase().storage.from(BUCKET).download(path);
     if (error || !data) return ''; // a missing file shows as "no image" instead of breaking the quote
     const dataUrl = await readAsDataUrl(data);
     dataUrlByPath.set(path, dataUrl);
-    uploadedByDataUrl.set(dataUrl, path);
     return dataUrl;
 }
 
@@ -79,8 +93,10 @@ async function downloadImage(path: string): Promise<string> {
 async function dehydrate(quote: Quote, userId: string): Promise<Quote> {
     const products = await Promise.all(quote.products.map(async (p): Promise<Product> => {
         const img = p.image ?? { base64String: '', height: 0 };
-        if (img.base64String?.startsWith('data:')) return { ...p, image: { base64String: '', height: img.height, path: await uploadImage(img.base64String, userId) } };
-        return { ...p, image: { base64String: '', height: img.height, ...(img.path ? { path: img.path } : {}) } };
+        // An image that still has its path was not replaced (pasting a new image drops the path).
+        if (img.path) return { ...p, image: { base64String: '', height: img.height, path: img.path, ...(img.thumbPath ? { thumbPath: img.thumbPath } : {}) } };
+        if (img.base64String?.startsWith('data:')) return { ...p, image: { base64String: '', height: img.height, ...(await uploadImage(img.base64String, userId)) } };
+        return { ...p, image: { base64String: '', height: img.height } };
     }));
     return normalizeQuote({ ...quote, products });
 }
@@ -110,11 +126,16 @@ export async function getQuotes(): Promise<Quote[]> {
     const { data, error } = await db.from('quotes').select('id, number, client, date, data').order('date', { ascending: false });
     if (error) fail('No se pudieron cargar las cotizaciones', error);
     const quotes = (data as QuoteRow[]).map(fromRow);
-    const paths = quotes.flatMap(q => q.products.map(p => p.image?.path).filter((x): x is string => !!x).slice(0, 3));
+    // Small previews where available (images saved before thumbnails existed fall back to the full file).
+    const preview = (p: Product) => p.image?.thumbPath ?? p.image?.path;
+    const paths = [...new Set(quotes.flatMap(q => q.products.map(preview).filter((x): x is string => !!x)))];
     if (paths.length === 0) return quotes;
-    const { data: signed } = await db.storage.from(BUCKET).createSignedUrls(paths, 3600);
-    const urlByPath = new Map((signed ?? []).filter(s => s.signedUrl).map(s => [s.path, s.signedUrl]));
-    return quotes.map(q => ({ ...q, products: q.products.map(p => (p.image?.path && urlByPath.has(p.image.path) ? { ...p, image: { ...p.image, base64String: urlByPath.get(p.image.path)! } } : p)) }));
+    const urlByPath = new Map<string, string>();
+    for (let i = 0; i < paths.length; i += 500) {
+        const { data: signed } = await db.storage.from(BUCKET).createSignedUrls(paths.slice(i, i + 500), 3600);
+        (signed ?? []).forEach(s => { if (s.signedUrl && s.path) urlByPath.set(s.path, s.signedUrl); });
+    }
+    return quotes.map(q => ({ ...q, products: q.products.map(p => { const u = preview(p) && urlByPath.get(preview(p)!); return u ? { ...p, image: { ...p.image, base64String: u } } : p; }) }));
 }
 
 export async function getQuote(id: string): Promise<Quote | undefined> {

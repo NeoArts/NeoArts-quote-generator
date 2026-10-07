@@ -6,8 +6,8 @@
   "active_stage": "12",
   "active_work_package": null,
   "revision": "src-sha256:391046bf93f0fa5f",
-  "updated_at": "2026-10-05T18:45:28.082963+00:00",
-  "next_action": "Stabilization: user creates an account on the live site, confirms the email, uploads browser data via the banner, and reports issues. Then close stage 12 and mark MIGRATION_COMPLETE.",
+  "updated_at": "2026-10-07T16:04:52.066769+00:00",
+  "next_action": "User publishes the pending changes (crash fix + DECISION-018) and confirms real use on the live site; then close stage 12.",
   "blockers": [],
   "budget_usage": {
     "work_packages_this_session": 6,

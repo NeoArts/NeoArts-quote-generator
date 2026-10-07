@@ -1,6 +1,6 @@
 {
   "base": "http://127.0.0.1:4322/",
-  "at": "2026-10-05T19:09:01.757Z",
+  "at": "2026-10-07T16:01:26.389Z",
   "results": [
     {
       "name": "W1 empty list and new quote creation",
@@ -92,6 +92,14 @@
     },
     {
       "name": "W24 PDF options and live preview",
+      "status": "PASS"
+    },
+    {
+      "name": "W25 reuse previous products: suggestions fill the row",
+      "status": "PASS"
+    },
+    {
+      "name": "W26 keyboard: Enter moves down, Shift+Enter up, Ctrl+D copies from above",
       "status": "PASS"
     },
     {

@@ -23,3 +23,5 @@ export const putQuote = (quote: Quote): Promise<unknown> => backend.putQuote(quo
 export const deleteQuote = (id: string): Promise<unknown> => backend.deleteQuote(id);
 export const importQuotes = (quotes: Quote[]) => backend.importQuotes(quotes);
 export const suggestNextNumber = (): Promise<string> => backend.suggestNextNumber();
+/** Full image of a stored product (cloud only; in browser mode images are already inline). */
+export const loadImage = (path: string): Promise<string> => (cloudEnabled ? cloud.downloadImage(path) : Promise.resolve(''));

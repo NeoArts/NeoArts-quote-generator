@@ -86,3 +86,10 @@ Use stable DECISION-### IDs. An agent recommendation is not user authorization.
 - Hardening after independent security review (no critical/high): PKCE, size limits and per-user row caps, 2 MB image limit, search_path on functions, CSP in production builds, caches cleared and pending saves flushed on sign-out.
 - Known limits: image files are never deleted (1 GB free storage); built-in email sending is rate-limited (custom SMTP/CAPTCHA recommended if abused); free projects pause after 7 days without use; lists load all quotes (no pagination).
 - Evidence: evidence/cloud/cloud-results.json (8/8 against local Supabase), evidence/cloud/rls-check.txt (13/13), browser-mode E2E 24/24, unit 63/63.
+
+## DECISION-018 — Time-saving improvements (accepted, user selection 2026-10-07: "Implement: 1, 4, 6 and 9")
+- 1 Reuse previous products: the Artículo cell suggests products from the user's other quotes (one entry per name + provider + print type, most recent wins; accent/case-insensitive word search). Choosing fills print type, provider, costs, profit and image; the row keeps its quantity if it has one; prices recalculate with the open quote's provider terms. Typing a new name still works (suggestions only fill on ↓/Enter or click).
+- 4 Keyboard: Enter / Shift+Enter move down/up in the same column, Ctrl+Enter adds a product and focuses its name, Ctrl+D copies the value from the row above. Hint shown under the table.
+- 6 PDFs: compressed streams and deflated images (8.5 MB -> 384 KB for the reference quote; visually identical, byte parity with legacy intentionally dropped). "Compartir" button (Web Share with files) where the browser supports it.
+- 9 Speed: PDF engine and letterhead preloaded while editing; each uploaded image also stores a ~160 px thumbnail used by the quote list and suggestions (older images fall back to the full file).
+- Evidence: unit 66/66 (tests/library.test.ts added), browser E2E 26/26 (W25 suggestions, W26 keys, W11 PDF < 2 MB), cloud E2E 9/9 (C3 thumbnails, C3b reuse with cloud image) against local Supabase, RLS 13/13, heavy upload still 40 MB peak.

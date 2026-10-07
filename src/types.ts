@@ -8,6 +8,8 @@ export type DocImage = {
     height: number;
     /** Cloud mode: storage path of the uploaded file. */
     path?: string;
+    /** Cloud mode: small preview (≈160 px) used by lists and suggestions. */
+    thumbPath?: string;
 };
 
 export type Product = {

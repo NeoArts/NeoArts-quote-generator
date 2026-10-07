@@ -231,7 +231,7 @@ await step('W11 PDF generation', async () => {
     assert.equal(pdf.name, 'Cotización Cliente Demo SAS REF_ VPM-120.pdf');
     fs.renameSync(pdf.file, path.join(OUT, 'downloads', 'target-quote.pdf'));
     const size = fs.statSync(path.join(OUT, 'downloads', 'target-quote.pdf')).size;
-    assert.ok(size > 100000, `pdf size ${size}`);
+    assert.ok(size > 100000 && size < 2_000_000, `pdf size ${size} (compressed PDFs must stay under 2 MB)`);
 });
 
 await step('W12 providers dialog: list, edit tiers by row, create, delete', async () => {
@@ -442,6 +442,39 @@ await step('W24 PDF options and live preview', async () => {
     await page.getByRole('button', { name: 'Restablecer valores predeterminados' }).click(); await wait(400);
     assert.deepEqual((await dbQuote('fixq01')).pdfOptions, {});
     await page.getByRole('button', { name: 'Ocultar vista previa' }).first().click();
+});
+
+await step('W25 reuse previous products: suggestions fill the row', async () => {
+    await page.goto(BASE + '#/cotizacion/fixq01'); await page.locator('#product-name-0').waitFor(); await wait(800);
+    const rows = await page.locator('[data-testid^="product-row-"]').count();
+    await page.locator('#product-name-0').focus();
+    await page.keyboard.press('Control+Enter');
+    await page.locator(`#product-name-${rows}`).waitFor();
+    assert.equal(await page.evaluate(() => document.activeElement?.id), `product-name-${rows}`, 'Ctrl+Enter focuses the new row');
+    await page.keyboard.type('gorr');
+    await page.getByRole('listbox', { name: 'Productos cotizados antes' }).waitFor();
+    await shot('26-product-suggestions');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await wait(500);
+    assert.equal(await page.inputValue(`#product-name-${rows}`), 'Gorra');
+    assert.equal(await page.inputValue(`#product-markType-${rows}`), 'BORDADO');
+    await page.getByText(/Fila llenada con “Gorra”/).first().waitFor();
+    // typing a new name without choosing keeps the typed text
+    await page.fill(`#product-name-${rows}`, 'Producto nuevo xyz');
+    await page.keyboard.press('Escape');
+    assert.equal(await page.inputValue(`#product-name-${rows}`), 'Producto nuevo xyz');
+});
+
+await step('W26 keyboard: Enter moves down, Shift+Enter up, Ctrl+D copies from above', async () => {
+    await page.locator('#product-cost-0').focus();
+    await page.keyboard.press('Enter'); await wait(100);
+    assert.equal(await page.evaluate(() => document.activeElement?.id), 'product-cost-1');
+    await page.keyboard.press('Shift+Enter'); await wait(100);
+    assert.equal(await page.evaluate(() => document.activeElement?.id), 'product-cost-0');
+    await page.locator('#product-markType-1').focus();
+    await page.keyboard.press('Control+d'); await wait(300);
+    assert.equal(await page.inputValue('#product-markType-1'), await page.inputValue('#product-markType-0'));
 });
 
 await step('W15 no console or page errors', async () => {

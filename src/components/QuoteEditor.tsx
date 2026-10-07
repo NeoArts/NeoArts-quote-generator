@@ -1,6 +1,8 @@
 import React from 'react';
 import { emptyProduct, type DocImage, type Product, type Quote } from '../types';
-import { getQuote, putQuote, trackSave } from '../lib/db';
+import { getQuote, getQuotes, loadImage, putQuote, trackSave } from '../lib/db';
+import { buildLibrary, type LibraryEntry } from '../lib/library';
+import { LibraryContext } from './ProductNameInput';
 import { applyProductUpdate, moveItem, nextProductId, recalcGroupOf, withAutomatedFields } from '../lib/calc';
 import { applyChange, effectiveProviders, ignoreChange, pendingChanges, withFrozenTerms } from '../lib/terms';
 import { notify, notifyUndoable } from '../lib/notify';
@@ -68,6 +70,19 @@ export default function QuoteEditor({ quoteId }: { quoteId: string }) {
     const [settingsOpen, setSettingsOpen] = React.useState(false);
     const [downloading, setDownloading] = React.useState(false);
     const { lastSaved, status } = useAutosave(quote);
+    const [library, setLibrary] = React.useState<LibraryEntry[]>([]);
+
+    // Product history from the other quotes, for name suggestions. Not critical: failures leave it empty.
+    React.useEffect(() => {
+        getQuotes().then(qs => setLibrary(buildLibrary(qs, quoteId))).catch(() => undefined);
+    }, [quoteId]);
+
+    // Warm up the PDF engine (code, fonts, letterhead) while the user edits, so the first PDF is instant.
+    React.useEffect(() => {
+        const warm = () => import('../pdf/assets').then(m => m.loadPdfAssets()).then(() => import('../pdf/generateQuote')).catch(() => undefined);
+        const idle = (window as Window & { requestIdleCallback?: (cb: () => void) => number }).requestIdleCallback;
+        if (idle) idle(warm); else setTimeout(warm, 1500);
+    }, []);
 
     React.useEffect(() => {
         getQuote(quoteId)
@@ -141,6 +156,44 @@ export default function QuoteEditor({ quoteId }: { quoteId: string }) {
 
     const moveRow = (from: number, to: number) => updateProducts(ps => moveItem(ps, from, to));
 
+    /** Fills a row from a previously quoted product; keeps the row's quantity if it already has one. */
+    const pickFromLibrary = async (row: number, entry: LibraryEntry) => {
+        let image: DocImage | null = null;
+        try {
+            if (entry.imagePath) image = { base64String: await loadImage(entry.imagePath), height: entry.imageHeight, path: entry.imagePath, ...(entry.thumbPath ? { thumbPath: entry.thumbPath } : {}) };
+            else if (entry.thumb.startsWith('data:')) image = { base64String: entry.thumb, height: entry.imageHeight };
+        } catch { image = null; }
+        updateProducts((ps, q) => {
+            const cur = ps[row];
+            if (!cur) return ps;
+            const edited: Product = {
+                ...cur,
+                name: entry.name, markType: entry.markType, provider: entry.provider,
+                cost: entry.cost, markCost: entry.markCost, otherCost: entry.otherCost,
+                profit: entry.profit || cur.profit,
+                quantity: Number(cur.quantity) ? cur.quantity : entry.quantity,
+                image: image?.base64String ? image : cur.image,
+            };
+            return applyProductUpdate(ps, row, edited, providersFor(q, ps.map((p, i) => (i === row ? edited : p))));
+        });
+        notify.success(`Fila llenada con “${entry.name}” (cotizado para ${entry.client || 'otro cliente'})`);
+    };
+
+    // Web Share with files (phones, some desktop browsers): send the PDF straight to WhatsApp, e-mail, etc.
+    const canShare = typeof navigator !== 'undefined' && !!navigator.canShare?.({ files: [new File([''], 'a.pdf', { type: 'application/pdf' })] });
+    const sharePdf = async () => {
+        setDownloading(true);
+        try {
+            const m = await import('../pdf/generateQuote');
+            const file = new File([await m.renderQuotePdf(quote)], m.pdfFileName(quote), { type: 'application/pdf' });
+            await navigator.share({ files: [file], title: `Cotización ${quote.client}` });
+        } catch (e) {
+            if (!(e instanceof DOMException && e.name === 'AbortError')) notify.error('No se pudo compartir el PDF. Usa "Descargar PDF".');
+        } finally {
+            setDownloading(false);
+        }
+    };
+
     const downloadPdf = () => {
         setDownloading(true);
         // PDF engine and assets are loaded on demand.
@@ -192,6 +245,7 @@ export default function QuoteEditor({ quoteId }: { quoteId: string }) {
                         onImageChange={changeImage(detailsIndex ?? 0)}
                         onCreateScales={createScales(detailsIndex ?? 0)}
                     />
+                    <LibraryContext.Provider value={{ entries: library, pick: pickFromLibrary }}>
                     <ProductTable
                         products={quote.products}
                         onFieldChange={changeField}
@@ -202,6 +256,7 @@ export default function QuoteEditor({ quoteId }: { quoteId: string }) {
                         onAdd={addRow}
                         onMove={moveRow}
                     />
+                    </LibraryContext.Provider>
                 </div>
                 {previewOpen && (
                     <aside className="xl:w-[40%] h-[78vh] xl:h-[calc(100vh-12.5rem)] xl:sticky xl:top-[5.5rem]">
@@ -214,7 +269,10 @@ export default function QuoteEditor({ quoteId }: { quoteId: string }) {
             <div className="sticky bottom-0 z-20 bg-sheet/95 backdrop-blur border-t border-rule shadow-[0_-4px_16px_-8px_rgba(24,32,47,0.15)]">
                 <div className="px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
                     <QuoteTotals products={quote.products} />
-                    <Button text="Descargar PDF" icon="download" variant="accent" loading={downloading} onClick={downloadPdf} />
+                    <div className="flex gap-2">
+                        {canShare && <Button text="Compartir" icon="upload" variant="secondary" disabled={downloading} onClick={sharePdf} />}
+                        <Button text="Descargar PDF" icon="download" variant="accent" loading={downloading} onClick={downloadPdf} />
+                    </div>
                 </div>
             </div>
         </div>

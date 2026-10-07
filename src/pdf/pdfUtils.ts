@@ -60,7 +60,8 @@ export class PdfProvider
 
     private CreateNewPdf(): jsPDF
     {
-        const doc = new jsPDF("p", "pt");
+        // Compressed streams + deflated images (IMPROVEMENT-013): same look, a fraction of the size.
+        const doc = new jsPDF({ orientation: "p", unit: "pt", compress: true });
         doc.setFontSize(this.layout?.fontSize || 11);
         doc.setFont("Montserrat-Regular", "normal");
         return doc;
@@ -121,7 +122,7 @@ export class PdfProvider
     SetDefaultHeader(): void
     {
         this.headerFooterContent.header = () => {
-            this.doc.addImage(this.images.header, "PNG", 0, 0, this.layout.width, this.layout.headerHeight);
+            this.doc.addImage(this.images.header, "PNG", 0, 0, this.layout.width, this.layout.headerHeight, "header", "FAST");
         };
         this.addHeaderFooter();
     }
@@ -129,7 +130,7 @@ export class PdfProvider
     SetDefaultFooter(): void
     {
         this.headerFooterContent.footer = () => {
-            this.doc.addImage(this.images.footer, "PNG", 0, this.layout.height - this.layout.footerHeight, this.layout.width, this.layout.footerHeight);
+            this.doc.addImage(this.images.footer, "PNG", 0, this.layout.height - this.layout.footerHeight, this.layout.width, this.layout.footerHeight, "footer", "FAST");
         };
         this.addHeaderFooter();
     }
@@ -164,7 +165,7 @@ export class PdfProvider
         // Check if image fits on current page
         this.checkPageBreak(height);
         
-        this.doc.addImage(image, format, x, actualY, width, height);
+        this.doc.addImage(image, format, x, actualY, width, height, undefined, "FAST");
         
         // Update current position if using relative positioning
         if (!y) {
@@ -180,7 +181,7 @@ export class PdfProvider
         }
 
         this.checkPageBreak(height);
-        this.doc.addImage(image, format, x, this.currentY, width, height);
+        this.doc.addImage(image, format, x, this.currentY, width, height, undefined, "FAST");
         this.currentY += height + this.layout.lineHeight;
     }
 
@@ -626,7 +627,9 @@ export class PdfProvider
                 xPosition, 
                 yPosition, 
                 imageWidth, 
-                imageHeight
+                imageHeight,
+                undefined,
+                "FAST"
             );
             
             
