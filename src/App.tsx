@@ -3,6 +3,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import QuoteList from './components/QuoteList';
 import QuoteEditor from './components/QuoteEditor';
 import AuthGate, { type Account } from './components/AuthGate';
+import { cloudOffline } from './lib/supabase';
 
 // Hash routing keeps deep links, refresh and back/forward working on any static host.
 // localStorage "currentQuote" is kept for parity with the legacy editor page.
@@ -68,6 +69,11 @@ export default function App() {
                 </div>
                 <div className="cmyk-strip" aria-hidden="true" />
             </header>
+            {cloudOffline && (
+                <p role="status" className="px-4 sm:px-6 py-2 text-sm bg-cyan-soft text-ink border-b border-rule-soft">
+                    Sin conexión con la nube: tus cotizaciones se guardan solo en este navegador. Cuando la nube vuelva, inicia sesión aquí mismo y súbelas a tu cuenta.
+                </p>
+            )}
             <main className="flex-1">
                 <AuthGate>
                     {acc => <AccountSync account={acc} onChange={setAccount}>

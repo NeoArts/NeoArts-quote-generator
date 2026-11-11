@@ -10,6 +10,8 @@ import type { ImportResult } from './localDb';
 const BUCKET = 'product-images';
 const ALLOWED = ['image/png', 'image/jpeg', 'image/webp'];
 const MAX_UPLOAD = 1.5 * 1024 * 1024;
+// File names are random UUIDs and never overwritten, so browsers may cache them for a year.
+const IMMUTABLE = '31536000';
 
 type QuoteRow = { id: string; number: string; client: string; date: string; data: Partial<Quote> | null };
 
@@ -31,6 +33,7 @@ const dataUrlByPath = new RecentMap<string>(80);
 export function clearCloudCaches(): void {
     uploadedByDataUrl.clear();
     dataUrlByPath.clear();
+    signedByPath.clear();
 }
 
 const MAX_SOURCE = 15 * 1024 * 1024;
@@ -66,13 +69,13 @@ async function uploadImage(dataUrl: string, userId: string): Promise<Uploaded> {
     const ext = blob.type === 'image/png' ? 'png' : blob.type === 'image/webp' ? 'webp' : 'jpg';
     const base = `${userId}/${crypto.randomUUID()}`;
     const storage = requireSupabase().storage.from(BUCKET);
-    const { error } = await storage.upload(`${base}.${ext}`, blob, { contentType: blob.type, upsert: false });
+    const { error } = await storage.upload(`${base}.${ext}`, blob, { contentType: blob.type, upsert: false, cacheControl: IMMUTABLE });
     if (error) throw new Error(`No se pudo subir una imagen: ${error.message}`);
     const uploaded: Uploaded = { path: `${base}.${ext}` };
     // Small preview for lists; a failure here only means lists fall back to the full image.
     try {
         const thumb = await reencode(source, 160, 0.8);
-        if (!(await storage.upload(`${base}.thumb.jpg`, thumb, { contentType: 'image/jpeg', upsert: false })).error) uploaded.thumbPath = `${base}.thumb.jpg`;
+        if (!(await storage.upload(`${base}.thumb.jpg`, thumb, { contentType: 'image/jpeg', upsert: false, cacheControl: IMMUTABLE })).error) uploaded.thumbPath = `${base}.thumb.jpg`;
     } catch { /* keep the full image only */ }
     uploadedByDataUrl.set(dataUrl, uploaded);
     dataUrlByPath.set(uploaded.path, dataUrl);
@@ -120,21 +123,29 @@ function fail(action: string, error: { message: string } | null): never {
     throw new Error(`${action}: ${error?.message ?? 'error desconocido'}`);
 }
 
-/** List view: no image downloads; the first images get short-lived signed URLs for thumbnails. */
+// Signed URLs are reused for most of their life: a new URL per visit defeats the browser cache and
+// re-downloads every thumbnail (this exhausted the egress quota).
+const SIGN_TTL = 6 * 3600;
+const signedByPath = new Map<string, { url: string; until: number }>();
+
+async function signThumbs(paths: string[]): Promise<Map<string, string>> {
+    const now = Date.now();
+    const missing = paths.filter(p => (signedByPath.get(p)?.until ?? 0) <= now);
+    for (let i = 0; i < missing.length; i += 500) {
+        const { data: signed } = await requireSupabase().storage.from(BUCKET).createSignedUrls(missing.slice(i, i + 500), SIGN_TTL);
+        (signed ?? []).forEach(s => { if (s.signedUrl && s.path) signedByPath.set(s.path, { url: s.signedUrl, until: now + (SIGN_TTL - 600) * 1000 }); });
+    }
+    return new Map(paths.flatMap(p => { const s = signedByPath.get(p); return s ? [[p, s.url] as [string, string]] : []; }));
+}
+
+/** List view: no full-size image downloads; small thumbnails only, via cached signed URLs. */
 export async function getQuotes(): Promise<Quote[]> {
-    const db = requireSupabase();
-    const { data, error } = await db.from('quotes').select('id, number, client, date, data').order('date', { ascending: false });
+    const { data, error } = await requireSupabase().from('quotes').select('id, number, client, date, data').order('date', { ascending: false });
     if (error) fail('No se pudieron cargar las cotizaciones', error);
     const quotes = (data as QuoteRow[]).map(fromRow);
-    // Small previews where available (images saved before thumbnails existed fall back to the full file).
-    const preview = (p: Product) => p.image?.thumbPath ?? p.image?.path;
-    const paths = [...new Set(quotes.flatMap(q => q.products.map(preview).filter((x): x is string => !!x)))];
-    if (paths.length === 0) return quotes;
-    const urlByPath = new Map<string, string>();
-    for (let i = 0; i < paths.length; i += 500) {
-        const { data: signed } = await db.storage.from(BUCKET).createSignedUrls(paths.slice(i, i + 500), 3600);
-        (signed ?? []).forEach(s => { if (s.signedUrl && s.path) urlByPath.set(s.path, s.signedUrl); });
-    }
+    // ponytail: images saved before thumbnails existed show no preview (falling back to the full file is what blew the egress quota).
+    const preview = (p: Product) => p.image?.thumbPath;
+    const urlByPath = await signThumbs([...new Set(quotes.flatMap(q => q.products.map(preview).filter((x): x is string => !!x)))]);
     return quotes.map(q => ({ ...q, products: q.products.map(p => { const u = preview(p) && urlByPath.get(preview(p)!); return u ? { ...p, image: { ...p.image, base64String: u } } : p; }) }));
 }
 

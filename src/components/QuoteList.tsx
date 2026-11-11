@@ -141,7 +141,7 @@ export default function QuoteList({ onOpen, account = null }: { onOpen: (id: str
                                             <span className="font-semibold text-ink truncate">{quote.client || 'Sin cliente'}</span>
                                             {images.length > 0 && (
                                                 <span className="hidden md:flex -space-x-2" aria-hidden="true">
-                                                    {images.map((src, i) => <img key={i} src={src} alt="" className="w-7 h-7 rounded-md object-contain bg-sheet ring-2 ring-sheet border border-rule-soft" />)}
+                                                    {images.map((src, i) => <img key={i} src={src} alt="" loading="lazy" className="w-7 h-7 rounded-md object-contain bg-sheet ring-2 ring-sheet border border-rule-soft" />)}
                                                 </span>
                                             )}
                                         </span>

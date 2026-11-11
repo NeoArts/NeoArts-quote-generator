@@ -4,6 +4,7 @@ import { countQuotes, getQuote as getLocalQuote, getQuoteIds } from '../lib/loca
 import { importQuotes } from '../lib/db';
 import { importProviders, readLocalProviders } from '../lib/providers';
 import { notify } from '../lib/notify';
+import { clearOfflineData, offlineDataPending } from '../lib/supabase';
 import { Button } from './ui';
 
 const flagKey = (userId: string) => `neoarts-local-uploaded:${userId}`;
@@ -21,7 +22,8 @@ export default function LocalDataBanner({ account, onUploaded }: { account: Acco
 
     React.useEffect(() => {
         if (!userId) return;
-        try { if (localStorage.getItem(flagKey(userId))) return; } catch { return; }
+        // Data saved while the cloud was down is offered again even if this account already uploaded once.
+        try { if (localStorage.getItem(flagKey(userId)) && !offlineDataPending()) return; } catch { return; }
         countQuotes()
             .then(quotes => { const c = { quotes, providers: readLocalProviders().length }; if (c.quotes || c.providers) setCounts(c); })
             .catch(() => undefined);
@@ -47,6 +49,7 @@ export default function LocalDataBanner({ account, onUploaded }: { account: Acco
             }
             if (totals.errors) { notify.error(`No se pudieron subir ${totals.errors} cotizaciones. Vuelve a intentarlo; las ya subidas no se duplican.`); return; }
             notify.success(`Subidas ${totals.success} cotizaciones y ${providers.length} proveedores${totals.duplicates ? ` (${totals.duplicates} ya estaban en tu cuenta)` : ''}`);
+            clearOfflineData();
             dismiss();
         } catch (e) {
             notify.error(e instanceof Error ? e.message : 'No se pudieron subir los datos');
