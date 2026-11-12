@@ -82,11 +82,22 @@ async function uploadImage(dataUrl: string, userId: string): Promise<Uploaded> {
     return uploaded;
 }
 
+// Persistent image cache: stored files never change (random names, no overwrite), so each one is
+// downloaded once per browser instead of on every quote open. Egress is the free plan's tightest limit.
+const cacheKey = (path: string) => new URL(`__images/${path}`, location.origin).href;
+const openImageCache = (): Promise<Cache | null> => ('caches' in window ? caches.open('neoarts-images').catch(() => null) : Promise.resolve(null));
+
 export async function downloadImage(path: string): Promise<string> {
     const cached = dataUrlByPath.get(path);
     if (cached) return cached;
-    const { data, error } = await requireSupabase().storage.from(BUCKET).download(path);
-    if (error || !data) return ''; // a missing file shows as "no image" instead of breaking the quote
+    const cache = await openImageCache();
+    let data: Blob | null = (await (await cache?.match(cacheKey(path)).catch(() => undefined))?.blob()) ?? null;
+    if (!data) {
+        const res = await requireSupabase().storage.from(BUCKET).download(path);
+        if (res.error || !res.data) return ''; // a missing file shows as "no image" instead of breaking the quote
+        data = res.data;
+        cache?.put(cacheKey(path), new Response(data)).catch(() => undefined);
+    }
     const dataUrl = await readAsDataUrl(data);
     dataUrlByPath.set(path, dataUrl);
     return dataUrl;
